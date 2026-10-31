@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Espace Recherche Mathéo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: sidebar de navigation fixe + espace de travail en cartes ; palette "bleu tarmac" + orange balisage */
+  --bg:#F4F6FA; --surface:#FFFFFF; --surface-2:#EEF2F8; --ink:#0F1B2D; --muted:#5B6678; --line:#DDE3EC;
+  --brand:#0B2545; --brand-ink:#FFFFFF; --accent:#E2701B; --accent-soft:#FCEBDD;
+  --good:#1F8A4C; --good-soft:#E1F3E8; --warn:#B7791F; --warn-soft:#FBF0D9; --info:#2457A6; --info-soft:#E3ECFA;
+  --font-display:"Sora", "Segoe UI", system-ui, sans-serif;
+  --font-body:"DM Sans", "Segoe UI", system-ui, sans-serif;
+  --radius:12px; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1320; --surface:#121D2E; --surface-2:#18263B; --ink:#E7ECF4; --muted:#93A0B4; --line:#24344C;
+    --brand:#08182E; --accent:#F08A3C; --accent-soft:#3A2414;
+    --good:#4CC17E; --good-soft:#12301F; --warn:#E3B04B; --warn-soft:#352A12; --info:#7BA7F0; --info-soft:#152742;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1320; --surface:#121D2E; --surface-2:#18263B; --ink:#E7ECF4; --muted:#93A0B4; --line:#24344C;
+  --brand:#08182E; --accent:#F08A3C; --accent-soft:#3A2414;
+  --good:#4CC17E; --good-soft:#12301F; --warn:#E3B04B; --warn-soft:#352A12; --info:#7BA7F0; --info-soft:#152742;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5}
+a{color:var(--info)}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:26px} h2{font-size:18px} h3{font-size:15px}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100%}
+aside{background:var(--brand);color:var(--brand-ink);padding:22px 14px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh}
+.who{display:flex;gap:12px;align-items:center;padding:0 8px}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;color:#fff}
+.who b{display:block;font-family:var(--font-display);font-size:15px}
+.who span{font-size:12px;opacity:.75}
+nav{display:flex;flex-direction:column;gap:2px}
+nav a{display:flex;justify-content:space-between;align-items:center;color:#D5DEEB;text-decoration:none;padding:9px 12px;border-radius:9px;font-weight:500}
+nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+nav a.active{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 3px 0 0 var(--accent)}
+nav a small{font-size:11px;background:rgba(255,255,255,.12);padding:1px 7px;border-radius:20px}
+.side-foot{margin-top:auto;font-size:11.5px;opacity:.7;padding:0 8px}
+.progress{background:rgba(255,255,255,.12);border-radius:20px;height:6px;overflow:hidden;margin-top:6px}
+.progress i{display:block;height:100%;background:var(--accent);width:0}
+main{padding:28px clamp(16px,3vw,40px) 60px;max-width:1240px;width:100%}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head p{margin:4px 0 0;color:var(--muted);max-width:68ch}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.card h2{margin-bottom:10px}
+.kpi b{font-family:var(--font-display);font-size:28px;font-variant-numeric:tabular-nums;display:block}
+.kpi span{color:var(--muted);font-size:13px}
+.kpi .bar{height:5px;background:var(--surface-2);border-radius:9px;margin-top:10px;overflow:hidden}
+.kpi .bar i{display:block;height:100%;background:var(--accent)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.pA{background:var(--accent-soft);color:var(--accent)} .pB{background:var(--info-soft);color:var(--info)} .pC{background:var(--surface-2);color:var(--muted)}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar input[type=search]{flex:1;min-width:200px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:20px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:6px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px 12px 0;overflow:hidden}
+.row .stripe{align-self:stretch;border-radius:0 4px 4px 0}
+.sA{background:var(--accent)} .sB{background:var(--info)} .sC{background:var(--line)}
+.row h3{font-size:15px;margin-bottom:2px}
+.row h3 a{color:var(--ink);text-decoration:none} .row h3 a:hover{text-decoration:underline;color:var(--info)}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
+.why{font-size:13px;color:var(--muted);margin-top:4px}
+.row.done{opacity:.55}
+.status{padding:7px 9px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:inherit;font-size:12.5px}
+.sec-title{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.sec-title .n{font-family:var(--font-display);font-size:12px;color:var(--accent);font-weight:700}
+.sec-title p{margin:0;color:var(--muted);font-size:13px}
+.timeline{display:flex;flex-direction:column;gap:10px}
+.tl{display:grid;grid-template-columns:130px 1fr;gap:14px}
+.tl .d{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
+.tl b{font-family:var(--font-display)}
+.quote{background:var(--surface-2);border-left:3px solid var(--accent);padding:12px 14px;border-radius:0 10px 10px 0;white-space:pre-wrap}
+.btn{background:var(--ink);color:var(--surface);border:0;border-radius:9px;padding:8px 13px;font:inherit;font-weight:600;font-size:13px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+ul.clean{margin:0;padding-left:18px} ul.clean li{margin-bottom:5px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
+.check:last-child{border-bottom:0}
+.check input{margin-top:4px;accent-color:var(--accent);width:16px;height:16px}
+.check.on span{text-decoration:line-through;color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.view{display:none} .view.on{display:block}
+.mobile-top{display:none}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:9px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+.pnew{background:var(--good-soft);color:var(--good)}
+.pwarn{background:var(--warn-soft);color:var(--warn)}
+.act{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.btn.sm{padding:6px 10px;font-size:12px}
+dialog{border:1px solid var(--line);border-radius:14px;padding:0;max-width:760px;width:calc(100% - 32px);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(8,16,30,.55)}
+.dlg-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface)}
+.dlg-body{padding:6px 20px 20px;max-height:70vh;overflow:auto}
+.dlg-body h3{margin:16px 0 6px}
+.kw{display:flex;flex-wrap:wrap;gap:6px}
+.relance{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.relance:last-child{border-bottom:0}
+.fiche h2{margin-bottom:4px}
+.fiche .lead{color:var(--muted);font-size:13.5px;margin:0 0 10px}
+.fiche details{border-top:1px solid var(--line);padding:9px 0}
+.fiche summary{cursor:pointer;font-weight:600;font-family:var(--font-display);font-size:13.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.fiche summary::-webkit-details-marker{display:none}
+.fiche summary::after{content:"+";color:var(--accent);font-size:18px;line-height:1}
+.fiche details[open] summary::after{content:"–"}
+.fiche details>div{margin-top:6px;font-size:13.5px}
+.fiche ul{margin:0;padding-left:18px}
+.fiche li{margin-bottom:4px}
+.fiche.target{outline:2px solid var(--accent)}
+@media (max-width:980px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}}
+/* empêche tout élément de forcer la page à être plus large que l'écran */
+.app>*,main,.grid>*,.list>*,.row>*,.card,.toolbar,.toolbar>*,.view{min-width:0}
+html,body{overflow-x:clip}
+.row h3,.why,.meta,.quote,td,.fiche{overflow-wrap:anywhere}
+nav a .ico{display:none}
+.lbl-short-m{display:none}
+@media (max-width:760px){.lbl-short-m{display:inline}}
+@media (max-width:760px){
+  body{font-size:14.5px}
+  .app{grid-template-columns:1fr}
+  aside{position:static;height:auto;padding:12px 16px;gap:0}
+  .who .avatar{width:34px;height:34px;font-size:13px}
+  /* barre d'onglets fixe en bas, comme une appli */
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:20;flex-direction:row;gap:0;background:var(--brand);border-top:1px solid rgba(255,255,255,.1);padding:4px 4px calc(4px + env(safe-area-inset-bottom));overflow-x:auto;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav a{flex:1 0 64px;flex-direction:column;justify-content:center;gap:2px;padding:6px 4px;font-size:10.5px;text-align:center;border-radius:8px;position:relative}
+  nav a.active{box-shadow:none;background:rgba(255,255,255,.12)}
+  nav a .ico{display:block;width:20px;height:20px;margin:0 auto}
+  nav a .lbl-long{display:none}
+  nav a small{position:absolute;top:2px;right:6px;font-size:9px;padding:0 5px;background:var(--accent);color:#fff}
+  .side-foot{display:none}
+  main{padding:18px 16px 96px}
+  h1{font-size:21px} h2{font-size:16.5px}
+  .head{margin-bottom:14px}
+  .g2,.g3{grid-template-columns:1fr}
+  .g4{grid-template-columns:1fr 1fr;gap:10px}
+  .card{padding:14px}
+  .kpi b{font-size:24px}
+  .kpi span{font-size:12px}
+  .row{grid-template-columns:5px 1fr;padding:12px 12px 12px 0;gap:12px}
+  .row .act{grid-column:2;flex-direction:row;flex-wrap:wrap}
+  .row .act .status{flex:1 1 120px;min-height:40px}
+  .row .act .btn{flex:1 1 100%;min-height:40px}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .toolbar>div{flex-wrap:nowrap!important;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .toolbar>div::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;padding:8px 12px}
+  .tl{grid-template-columns:1fr;gap:2px}
+  .relance{grid-template-columns:1fr}
+  .relance .btn{min-height:40px}
+  .check{padding:11px 0}
+  /* tableaux entreprises -> cartes */
+  .co-table thead{display:none}
+  .co-table,.co-table tbody,.co-table tr,.co-table td{display:block;width:100%!important}
+  .co-table tr{padding:12px 4px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+  .co-table tr:last-child{border-bottom:0}
+  .co-table td{border:0;padding:0}
+  .co-table td:nth-child(1){grid-column:1}
+  .co-table td:nth-child(5){grid-column:2;grid-row:1 / span 2;align-self:center}
+  .co-table td:nth-child(2){grid-column:1}
+  .co-table td:nth-child(3),.co-table td:nth-child(4){grid-column:1 / -1;font-size:13px}
+  .co-table td:nth-child(5) input{width:22px!important;height:22px!important}
+  .card.table-wrap{padding:4px 12px!important}
+  /* fenêtre candidature plein écran */
+  dialog{width:100%;max-width:100%;height:100%;max-height:100%;margin:0;border-radius:0;border:0}
+  .dlg-body{max-height:none;height:calc(100% - 80px)}
+  .toast{bottom:84px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="who"><div class="avatar">MI</div><div><b>Mathéo Irigaray</b><span>Acheteur Hors Production</span></div></div>
+    <nav id="nav">
+      <a href="#accueil" data-v="accueil"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg><span><span class="lbl-long">Tableau de bord</span><span class="lbl-short-m">Accueil</span></span></a>
+      <a href="#offres" data-v="offres"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><span>Offres</span><small id="cOff"></small></a>
+      <a href="#reseau" data-v="reseau"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16.5 14.6c2.6.2 4.4 2 5 4.9"/></svg><span>Réseau</span><small id="cNet"></small></a>
+      <a href="#entreprises" data-v="entreprises"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21V5a1 1 0 011-1h9a1 1 0 011 1v16M15 10h4a1 1 0 011 1v10M3 21h18M8 8h3M8 12h3M8 16h3"/></svg><span>Entreprises</span><small id="cCo"></small></a>
+      <a href="#fiches" data-v="fiches"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg><span><span class="lbl-long">Fiches entretien</span><span class="lbl-short-m">Fiches</span></span><small id="cFi"></small></a>
+      <a href="#messages" data-v="messages"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span><span class="lbl-long">Messages types</span><span class="lbl-short-m">Messages</span></span></a>
+      <a href="#plan" data-v="plan"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1h11"/></svg><span><span class="lbl-long">Plan 30 jours</span><span class="lbl-short-m">Plan</span></span></a>
+      <a href="#profil" data-v="profil"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.2-7 8-7s7 2.5 8 7"/></svg><span><span class="lbl-long">Mon profil</span><span class="lbl-short-m">Profil</span></span></a>
+    </nav>
+    <div class="side-foot">Avancement global<div class="progress"><i id="sideProg"></i></div><p id="sideTxt" style="margin:6px 0 0"></p><p style="margin-top:14px">Données LinkedIn du 31/10/2026. Ton suivi est enregistré dans ce navigateur uniquement.</p></div>
+  </aside>
+  <main>
+    <!-- ACCUEIL -->
+    <section class="view" id="v-accueil">
+      <div class="head"><div><h1>Salut Mathéo, voici ton espace de recherche</h1><p>Tout est classé par priorité : commence par le haut de chaque liste. Marque tes candidatures et prises de contact au fur et à mesure, ton avancement se met à jour.</p></div></div>
+      <div class="grid g4" id="kpis"></div>
+      <div class="card" style="margin-top:14px"><h2>À relancer aujourd'hui</h2><p style="margin:0 0 6px;color:var(--muted);font-size:13px">Candidatures et invitations sans réponse depuis 7 jours ou plus. Clique sur « Relancé » une fois fait : le compteur repart pour 7 jours.</p><div id="relances"></div></div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card"><h2>Les 5 actions de la semaine</h2><div id="weekTodo"></div></div>
+        <div class="card"><h2>Ton positionnement en une phrase</h2>
+          <p class="quote">Acheteur Hors Production spécialisé Travel, MICE et Mobilité, formé chez L'Oréal, Bolloré/AGL et EDF, disponible immédiatement à Paris.</p>
+          <h3 style="margin:14px 0 6px">Tes 3 atouts</h3>
+          <ul class="clean">
+            <li><b>Une catégorie rare</b> : voyages, hôtels, événements, flottes. Peu de juniors l'ont déjà gérée en grand groupe.</li>
+            <li><b>Le cycle achat complet</b> : besoin, appel d'offres, négociation, contrat, suivi fournisseurs.</li>
+            <li><b>Des logos solides</b> : EDF, L'Oréal, Bolloré / MSC, plus le MS KEDGE.</li>
+          </ul>
+          <h3 style="margin:14px 0 6px">Ta formulation</h3>
+          <p style="margin:0">« Mon CDD d'acheteur hors production chez AGL s'est terminé fin octobre. » Sur LinkedIn, c'est bien une fin de CDD.</p>
+        </div>
+      </div>
+      <div class="sec-title"><span class="n">TOP 6</span><h2>Offres à postuler en premier</h2></div>
+      <div class="list" id="topJobs"></div>
+      <div class="sec-title"><span class="n">TOP 6</span><h2>Personnes à contacter en premier</h2></div>
+      <div class="list" id="topPeople"></div>
+    </section>
+
+    <!-- PROFIL -->
+    <section class="view" id="v-profil">
+      <div class="head"><div><h1>Ton profil, analysé</h1><p>Ce que voient les recruteurs aujourd'hui, et ce qu'il faut changer sur LinkedIn.</p></div></div>
+      <div class="grid g2">
+        <div class="card"><h2>Parcours</h2><div class="timeline" id="timeline"></div></div>
+        <div class="card"><h2>Formation</h2>
+          <div class="timeline">
+            <div class="tl"><span class="d">2025 – 2026</span><div><b>AeroSchool</b><br>Cabin Crew Attestation (CCA)</div></div>
+            <div class="tl"><span class="d">2024 – 2025</span><div><b>KEDGE Business School</b><br>MS Manager de l'Achat International (MAI)</div></div>
+            <div class="tl"><span class="d">2021 – 2024</span><div><b>Rennes School of Business</b><br>Master in Management, PGE</div></div>
+            <div class="tl"><span class="d">S1 2023</span><div><b>Hanyang University</b>, Séoul<br>Semestre d'échange</div></div>
+            <div class="tl"><span class="d">2019 – 2021</span><div><b>Lycée Louis Barthou</b>, Pau<br>CPGE ECS</div></div>
+          </div>
+          <h2 style="margin-top:18px">Salaire visé</h2>
+          <table><tbody>
+            <tr><td>Grand groupe, IDF</td><td style="font-variant-numeric:tabular-nums"><b>38 – 45 k€</b> brut/an</td></tr>
+            <tr><td>Cabinet de conseil achats</td><td style="font-variant-numeric:tabular-nums">38 – 42 k€</td></tr>
+            <tr><td>Public / parapublic</td><td style="font-variant-numeric:tabular-nums">32 – 38 k€</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px"><h2>À corriger sur LinkedIn</h2><div id="fixes"></div></div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card"><h2>Nouveau titre</h2><p class="quote" id="newTitle">Acheteur International | Achats Hors Production : Travel, MICE, Mobilité, IT &amp; Facilities | Ex-Bolloré, L'Oréal, EDF | MS KEDGE | Disponible</p><button class="btn" data-copy="newTitle">Copier le titre</button></div>
+        <div class="card"><h2>Nouvelle section « Infos »</h2><p class="quote" id="newAbout">Acheteur Hors Production avec 2,5 ans d'expérience en grands groupes internationaux (Bolloré / Africa Global Logistics, L'Oréal, EDF). Spécialisé sur les catégories Travel, Hôtels, MICE et Mobilité, j'ai aussi géré des achats IT, Facilities et industriels (pièces de rechange nucléaires, en marchés publics).
+
+• Appels d'offres internationaux, dont l'AO Hôtel Global de L'Oréal
+• Négociations commerciales, juridiques et techniques
+• Contrats-cadres et suivi de la performance fournisseurs
+• Analyse des dépenses et reporting
+• RSE, compliance et risques fournisseurs
+• SAP, Excel avancé
+
+Diplômé du MS Manager de l'Achat International (KEDGE) et du PGE de Rennes School of Business (échange à Hanyang University, Séoul).
+Basé à Paris, disponible immédiatement pour un poste d'Acheteur / Category Buyer.</p><button class="btn" data-copy="newAbout">Copier le texte</button></div>
+      </div>
+    </section>
+
+    <!-- OFFRES -->
+    <section class="view" id="v-offres">
+      <div class="head"><div><h1>Offres d'emploi</h1><p>Repérées sur LinkedIn. A = postule cette semaine, B = bon fit, C = porte d'entrée. Clique sur un titre pour ouvrir l'offre, et sur « Préparer ma candidature » pour obtenir la lettre et les arguments adaptés.</p><p id="updInfo" style="font-size:13px"></p></div></div>
+      <div class="toolbar">
+        <input type="search" id="qJobs" placeholder="Rechercher une entreprise, un poste, une ville…" aria-label="Rechercher une offre">
+        <div id="fJobs" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+      <div class="list" id="jobs"></div>
+    </section>
+
+    <!-- RESEAU -->
+    <section class="view" id="v-reseau">
+      <div class="head"><div><h1>Ton réseau</h1><p>Classé par cercle : commence par tes anciens managers (recommandations), puis les anciens de Bolloré/AGL partis ailleurs. « Relation commune avec Pierre » = Pierre peut te présenter.</p></div></div>
+      <div class="toolbar">
+        <input type="search" id="qNet" placeholder="Rechercher un nom, une entreprise…" aria-label="Rechercher un contact">
+        <div id="fNet" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+      <div id="net"></div>
+    </section>
+
+    <!-- ENTREPRISES -->
+    <section class="view" id="v-entreprises">
+      <div class="head"><div><h1>Entreprises cibles</h1><p>Où candidater en spontané. Chaque ligne indique l'angle à jouer et, quand il existe, ton point d'entrée.</p></div></div>
+      <div class="toolbar">
+        <input type="search" id="qCo" placeholder="Rechercher une entreprise…" aria-label="Rechercher une entreprise">
+        <div id="fCo" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+      <div id="cos"></div>
+    </section>
+
+    <!-- FICHES -->
+    <section class="view" id="v-fiches">
+      <div class="head"><div><h1>Fiches entretien</h1><p>À relire la veille d'un entretien. Les enjeux achats sont des pistes de réflexion, pas des informations confirmées par l'entreprise : avant chaque entretien, vérifie les actualités récentes (site, communiqués, LinkedIn de l'entreprise).</p></div></div>
+      <div class="toolbar"><input type="search" id="qFi" placeholder="Rechercher une entreprise…" aria-label="Rechercher une fiche"></div>
+      <div class="grid g2" id="fiches"></div>
+    </section>
+
+    <!-- MESSAGES -->
+    <section class="view" id="v-messages">
+      <div class="head"><div><h1>Messages types</h1><p>Copie, remplace les [crochets], envoie. Les invitations LinkedIn sont limitées à 300 caractères : le compteur l'indique.</p></div></div>
+      <div class="grid g2" id="msgs"></div>
+      <div class="card" style="margin-top:14px"><h2>Questions d'entretien à préparer</h2>
+        <ul class="clean">
+          <li><b>Racontez un appel d'offres de A à Z.</b> L'AO Hôtel Global de L'Oréal : nombre de fournisseurs, critères, résultat.</li>
+          <li><b>Comment suivez-vous la performance d'un fournisseur ?</b> KPI et revues chez Bolloré.</li>
+          <li><b>La RSE dans vos achats ?</b> Critères CO2 en travel et mobilité, véhicules électriques, compliance.</li>
+          <li><b>Pourquoi 2 mois chez AGL ?</b> Un CDD sur une mission précise, dans la continuité de l'alternance Bolloré.</li>
+          <li><b>Cas de négociation</b> : baisse de prix contre qualité de service. Prépare ta BATNA et le coût total (TCO).</li>
+          <li><b>Pourquoi le CCA ?</b> Passion pour l'aérien, sens du service et de la sécurité. Montre que tu restes dans les achats.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PLAN -->
+    <section class="view" id="v-plan">
+      <div class="head"><div><h1>Plan sur 30 jours</h1><p>Coche au fur et à mesure.</p></div></div>
+      <div class="grid g2" id="plan"></div>
+      <div class="card" style="margin-top:14px"><h2>Où chercher</h2>
+        <div class="table-wrap"><table><thead><tr><th>Canal</th><th>À faire</th></tr></thead><tbody>
+          <tr><td>LinkedIn Jobs</td><td>3 alertes quotidiennes : « acheteur indirect », « acheteur » (IDF), « category buyer ».</td></tr>
+          <tr><td>APEC</td><td>Offres cadres et accompagnement gratuit (pitch, relecture de CV).</td></tr>
+          <tr><td>France Travail</td><td>Inscription dès la fin du CDD pour l'allocation chômage.</td></tr>
+          <tr><td>Welcome to the Jungle, Indeed, HelloWork</td><td>Scale-ups, ETI et PME.</td></tr>
+          <tr><td>Choisir le service public</td><td>Postes d'acheteur public (ministères, hôpitaux, centrales d'achat).</td></tr>
+          <tr><td>CDAF</td><td>Association des acheteurs : offres et événements réseau.</td></tr>
+          <tr><td>Alumni KEDGE et Rennes SB</td><td>Offres réservées aux anciens et cooptation.</td></tr>
+          <tr><td>Cabinets</td><td>Michael Page, Page Personnel, Hays, Morgan Philips, Robert Walters, KARISMA : envoie ton CV aux consultants listés dans « Réseau ».</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="kit" aria-labelledby="kitTitle">
+  <div class="dlg-head"><div><h2 id="kitTitle"></h2><div class="meta" id="kitMeta"></div></div><button class="btn ghost sm" id="kitClose">Fermer</button></div>
+  <div class="dlg-body" id="kitBody"></div>
+</dialog>
+
+<script>
+const J=(id)=>id?`https://www.linkedin.com/jobs/view/${id}/`:null;
+const L=(s)=>s.startsWith('?')?`https://www.linkedin.com/search/results/people/${s}`:`https://www.linkedin.com/in/${s}`;
+
+/* ---------- OFFRES ---------- [prio, entreprise, poste, lieu, jobId, catégorie, pourquoi] */
+const JOBS=[
+["A","JCDecaux","Acheteur Indirect Mobilité F/H","Plaisir (78)",null,"Mobilité","Exactement ta catégorie : mobilité, hors production. Cherche le titre sur LinkedIn ou jcdecaux.com."],
+["A","HEINEKEN France","Acheteur Achats Indirects H/F","Rueil-Malmaison","4479119826","Indirects","Achats indirects dans un groupe international."],
+["A","Groupe Bon Marché (LVMH)","Acheteur Indirect F/H","Paris 7e","4480269569","Indirects","Indirects dans l'univers luxe LVMH."],
+["A","KPMG France","Acheteur Indirect IT F/H","Courbevoie, hybride","4447206016","Indirects","IT indirect, que tu as couvert chez AGL. Les consultants voyagent beaucoup."],
+["A","Lynkus","Acheteur Frais Généraux (H/F)","Arcueil","4475831369","Indirects","Frais généraux = hors production."],
+["A","Resah","Acheteur Services généraux","Paris","4480988211","Public","Services généraux et achat public (ton expérience EDF)."],
+["A","VINCI","Acheteur/Acheteuse","Nanterre, hybride","4484474931","Grand groupe","Direction achats d'un grand groupe. Directeur achats indirects identifié dans Réseau."],
+["A","Aramisauto","Acheteur International Trilingue, CDI","Arcueil, hybride","4480917258","Mobilité","Automobile et international (une 3e langue est demandée)."],
+["A","Aramisauto","Acheteur Trilingue (FR/EN/IT ou DE), CDI","Arcueil","4481582384","Mobilité","2e annonce Aramisauto."],
+["A","Paris Saint-Germain","Acheteur Corporate Matchday F/H","Boulogne-Billancourt","4483060920","Événementiel","Achats d'hospitalité et d'événements, proche du MICE."],
+["A","KARISMA Recrutement Achats","Responsable Achats Hospitality","Levallois-Perret, hybride","4478556280","Événementiel","Hôtellerie, comme ton AO Hôtel L'Oréal. Poste un peu senior : tente quand même."],
+["A","EDF","Acheteur gros équipements à l'international","Puteaux, à distance","4479246866","Grand groupe","Ton ancien employeur : active ton réseau de la Direction Achats Groupe."],
+["A","Framatome","Acheteur gros équipements à l'international","Courbevoie, à distance","4478137409","Grand groupe","Filiale d'EDF, nucléaire, international."],
+["A","Recommerce Group","Acheteur/Acheteuse (H/F)","Gentilly, hybride","4484491191","PME / ETI","Scale-up en croissance."],
+["A","France Télévisions","Acheteur IT (F-H)","Paris","4480633990","Public","Achats IT dans un cadre public."],
+["A","TRANSATEL (NTT)","Acheteur IT/Télécom H/F","Courbevoie, hybride","4477398576","Indirects","IT et télécom."],
+["A","Mondial Relay","Acheteur Immobilier H/F","Paris, hybride","4480796505","Indirects","Facilities dans un univers logistique."],
+["A","Ministère de l'Europe et des Affaires étrangères","Acheteur – rédacteur (H/F)","Paris","4482134857","Public","Achat public, gros volume de déplacements."],
+["B","École Polytechnique","Acheteur marchés publics (F/H)","Palaiseau, hybride","4480870545","Public","Achat public."],
+["B","Cramif","Acheteur/Acheteuse","Paris, hybride","4484524213","Public","Achat public."],
+["B","Autorité des marchés financiers","Acheteur / juriste, CDD 4 mois","Paris, hybride","4477820078","Public","CDD court pour rebondir vite."],
+["B","Département des Hauts-de-Seine","Acheteur-juriste H/F","Nanterre, hybride","4474039654","Public","Achat public."],
+["B","Commissariat au Numérique de Défense","Acheteur F/H","Le Kremlin-Bicêtre","4465674605","Public","Achat public défense."],
+["B","Davidson Consulting","Consultant achat (H/F)","Île-de-France","4182304078","Conseil","Missions chez de grands comptes."],
+["B","Astek","Acheteur (H/F)","Paris, hybride","4480631939","Conseil","Missions achats."],
+["B","agap2","Acheteur/Acheteuse","Île-de-France","4474765461","Conseil","Missions achats."],
+["B","Innoha","Acheteur Prestations Intellectuelles","Paris","4316919353","Conseil","Indirects en mission."],
+["B","VIDAL ASSOCIATES","Acheteur/Acheteuse","Île-de-France, hybride","4470163256","PME / ETI","Via cabinet."],
+["B","Confidentiel","Acheteur.se","Île-de-France","4484989102","PME / ETI","Offre anonyme."],
+["B","Laval Europe","Acheteur H/F","Paris","4483571573","PME / ETI","Acheteur généraliste."],
+["B","Institut Curie","Acheteur H/F","Paris","4456265544","Public","Santé."],
+["B","Toast","Acheteur Groupe (H/F), santé","Paris","4477643371","PME / ETI","Achats groupe."],
+["B","Groupe Arthur Hunt","Acheteur IT confirmé","Saint-Denis","4481582415","Indirects","IT."],
+["B","Bertrand Franchise","CDI – Acheteur H/F","Clichy, hybride","4478571944","Retail / conso","Restauration (Burger King, Hippopotamus…)."],
+["B","BURGER KING France","CDI – Acheteur H/F","Clichy","4476027577","Retail / conso","Restauration."],
+["B","Areas France","Acheteur Alimentaire F/H","Saint-Ouen, hybride","4481961859","Aérien","Restauration en aéroports et gares."],
+["B","Histoire d'Or","Acheteur junior","Paris","4479370733","Retail / conso","Poste junior."],
+["B","SE3M","Acheteur / Acheteuse (H/F)","Puteaux","4481930880","PME / ETI","Acheteur généraliste."],
+["B","Ville de Clichy-la-Garenne","Acheteur H/F","Clichy","4483910893","Public","Acheteur territorial."],
+["B","MEO","Acheteur projet","Évry-Courcouronnes","4462407386","Conseil","Projets."],
+["B","Eutelsat","IRIS2 Procurement Manager","Issy-les-Moulineaux, hybride","4482522513","Grand groupe","Spatial, international."],
+["B","FLYING WHALES","Acheteur Programme (H/F)","Suresnes, hybride","4420278987","Aérien","Aéronautique."],
+["B","Bouygues Construction Purchasing","Acheteur Projet F/H","Saint-Denis","4445004861","Grand groupe","BTP."],
+["B","MBDA","Acheteur Projets F/H","Le Plessis-Robinson","4472023420","Grand groupe","Défense."],
+["B","Equans","Acheteur Sénior Catégories Techniques","Courbevoie, hybride","4475966114","Grand groupe","Category managers Mobility chez Equans dans Réseau."],
+["B","SCAMARK – E.Leclerc","CDI – Acheteur / Chef de produit frais","Ivry-sur-Seine, hybride","4473610688","Retail / conso","Contact KEDGE MAI : Noa Trichet."],
+["B","Groupement Mousquetaires","Acheteur Chef de Produits, bâtiment","Bondoufle, hybride","4484506979","Retail / conso","Contact ex-Bolloré : Thomas Darbois."],
+["C","Cartier","Acheteur Senior (H/F)","Paris, hybride","4473333593","Luxe","Senior : candidature pour se faire connaître."],
+["C","CHANEL","CDD – Acheteur sous-traitance Parfums Beauté","Neuilly-sur-Seine","4480274328","Luxe","CDD dans le luxe."],
+["C","Hermès","CDD – Responsable achats industriels","Paris","4422028481","Luxe","Hermès recrute en achats."],
+["C","Hermès","CDD – Responsable achats tissus","Paris","4462961764","Luxe","Hermès recrute en achats."],
+["C","SANDRO (SMCP)","CDI – Responsable Achats Composants","Paris","4475795218","Luxe","Mode premium."],
+["C","Van Cleef & Arpels","CDD – Approvisionneur","Paris, hybride","4479609324","Luxe","Porte d'entrée Richemont."],
+["C","Safran","Acheteur Commodité Usinage F/H","Vélizy-Villacoublay","4478902398","Aérien","Aéronautique, achats directs."],
+["C","Renault Group","Acheteur Software Multimedia (H/F)","Guyancourt","4481664720","Mobilité","Automobile."],
+["C","Alliance Automotive Group","Responsable Achats Poids Lourds","Levallois-Perret","4483024391","Mobilité","Automobile, poste senior."],
+["C","SODIAAL","Acheteur Ingrédients et Commodités","Paris","4478983614","Retail / conso","Achats directs."],
+["C","Picard Surgelés","Acheteur Produits Élaborés, CDD","Issy-les-Moulineaux","4484931926","Retail / conso","CDD."],
+["C","Sagemcom","Acheteur pièces mécaniques","Bois-Colombes","4479964601","Grand groupe","Achats directs."],
+["C","Riva Acier","Acheteur H/F","Gargenville","4474279518","Grand groupe","Industrie."],
+["C","MEOGROUP","Acheteur ferroviaire","Nanterre","4479844447","Mobilité","Ferroviaire."],
+["C","Made In Design","Acheteur Chef de Produit","Paris, hybride","4483208451","Retail / conso","E-commerce."],
+["C","Talent Commun","Acheteur industriel confirmé","Cergy","4484009932","Grand groupe","Industrie."],
+["C","Eiffage Construction","Approvisionneur F/H","Saint-Ouen","4483230584","Grand groupe","Porte d'entrée Eiffage."],
+["B","Framatome","Acheteur Transport, logistique et sous-traitance","Saint-Marcel (71)","4467886832","Hors IDF","Transport et logistique, groupe EDF."],
+["B","Elzéar Executive Search","Acheteur Transports","Hauts-de-France","4480027749","Hors IDF","Transport."],
+["B","TotalEnergies","Acheteur solutions digitales débutant","Pau","4481556442","Hors IDF","Poste débutant ; tu connais Pau."],
+["B","Orano","Acheteur(se) junior projet industriel","Cherbourg","4483023890","Hors IDF","Nucléaire, comme EDF."],
+["B","MEO","Acheteur Indirect Prestation RH","Lyon, télétravail","4477693839","Hors IDF","Indirects, en télétravail."],
+["B","Urgo Medical","Chargé(e) achats hors production","Chenôve (21)","4483858515","Hors IDF","Hors production."],
+["B","Ministère des Armées","Acheteur marchés publics, défense","Bruz (35)","4476443824","Hors IDF","Près de Rennes."],
+["C","CMA CGM","Internship – Indirect Procurement","Marseille","4480235043","Hors IDF","Stage, mais ça montre une équipe d'achats indirects active."],
+["C","NAVAL GROUP","CDI – Acheteur","Ollioules (83)","4476426116","Hors IDF","Défense."],
+/* --- mise à jour du 31/10/2026 (soir) : ajouter toujours à la fin pour garder le suivi de Mathéo --- */
+["A","VINCI","Acheteur famille Véhicules F/H","Nanterre","4484775364","Mobilité","Achats de véhicules pour le groupe : c'est ta catégorie Mobilité, chez un employeur où tu as déjà un contact (Olivier Blet)."],
+["A","Orient Express (Accor)","Purchaser Orient Express Sailing Yachts","Paris","4484854569","Événementiel","Voyage et hospitalité de luxe : ton expérience Travel, Hôtels et MICE (L'Oréal) est directement utile."],
+["A","Arkema","Acheteur Transport Logistique Europe H/F/X","Île-de-France, hybride","4485337414","Indirects","Achats transport à l'échelle européenne : ton passage chez AGL et Bolloré est un vrai atout."],
+["A","Hermès","CDI – Expert Performance Achats Transport","Bobigny","4440761660","Luxe","Achats transport dans le luxe, en CDI. Directrice des achats indirects Hermès dans ton réseau."],
+["B","Lagardère Travel Retail","Acheteur Négociateur Vins et Spiritueux, CDD","Levallois-Perret","4477812327","Aérien","Boutiques d'aéroports. Contact : Eva Esteves (ex-L'Oréal), acheteuse chez Lagardère Travel Retail."],
+["B","Equans France","Acheteur sous-traitance H/F","Guyancourt","4484508813","Grand groupe","Equans recrute en achats ; un Category Manager Fleet & Mobility y travaille (Antoine Skrzynski)."],
+["B","Fed Supply","Acheteur (F/H)","Paris","4484870204","Conseil","Cabinet de recrutement spécialisé achats : inscris-toi chez eux en même temps."],
+["B","Nestlé","Procurement ESG Controller F/M","Issy-les-Moulineaux","4481743250","Grand groupe","Achats et RSE : met en avant ta partie RSE et risques fournisseurs chez Bolloré."],
+["B","Société des grands projets","Acheteur projet F/H","Saint-Denis, hybride","4459318735","Public","Établissement public (Grand Paris Express) : achat public et grands contrats."],
+["C","SuprAero Equipement","Acheteur aéronautique – Composants","Paris, hybride","4483047220","Aérien","Aéronautique, achats directs."],
+["C","Hermès","CDI – Acheteur façon","Pantin","4412664963","Luxe","Achats de production, mais CDI chez Hermès."],
+["C","Vernet Group","Acheteur industriel – famille et projets","Ollainville, hybride","4484959230","Grand groupe","Achats industriels."],
+["B","ERIKS France","Acheteur junior","Décines-Charpieu (Lyon)","4483481336","Hors IDF","Poste junior, région lyonnaise."],
+["C","BNP Paribas","Group Lead Buyer Software","Mérignac (Bordeaux), hybride","4469207169","Hors IDF","Achats IT groupe ; contact Mathieu Fontaine chez BNP Paribas Real Estate."],
+["C","Sabena technics","Acheteur stratégique groupe","Mérignac (Bordeaux)","4478012144","Hors IDF","Maintenance aéronautique."]
+];
+
+/* ---------- RESEAU ---------- [cercle, slug, nom, poste, apport, relation commune avec Pierre(bool)] */
+const CIRCLES=[
+ ["c1","1. Anciens managers et collègues Bolloré / AGL","Pour des recommandations et des références. À contacter en premier."],
+ ["c2","2. Anciens de Bolloré / AGL partis ailleurs","Ils connaissent ton ancienne équipe et peuvent te coopter chez leur employeur actuel."],
+ ["c3","3. Réseau L'Oréal","Ton ancienne équipe Mobility & MICE et des anciens partis ailleurs."],
+ ["c4","4. Réseau EDF","Direction des Achats Groupe. Pense aussi à Christian Turlan et Martin Krafft (tes tuteurs)."],
+ ["c5","5. Alumni KEDGE MAI","Même master que toi : accueil facile."],
+ ["c6","6. Category Managers Travel / Mobility","Ton futur métier : ce sont eux qui recrutent des acheteurs comme toi."],
+ ["c7","7. Directeurs achats indirects","Décideurs. Message court, très ciblé."],
+ ["c8","8. Recruteurs spécialisés Achats","Envoie-leur ton CV directement."]
+];
+const NET=[
+["c1","kevin-roca-95824051","Kevin Roca","Global Category Manager Mobility, Bolloré & Vivendi","Ton manager : demande une recommandation LinkedIn et l'accord pour le citer en référence.",0],
+["c1","jeannechauveau","Jeanne Chauveau","Senior Global Mobility Buyer, Bolloré","Recommandation ; réseau Pernod Ricard.",0],
+["c1","bruno-zottola-6296b26b","Bruno Zottola","Global Category Manager IT, Bolloré","Référence sur la partie IT de ton CDD.",0],
+["c1","clara-baron-26a189221","Clara Baron","Buyer Industrial, Services & Facilities, Bolloré","Référence Facilities.",0],
+["c1","ayoubramdane","Ayoub Ramdane","Responsable achat indirect, Bolloré","Réseau achats indirects AXA et Caisse des Dépôts.",0],
+["c1","mamadou-dial-854945202","Mamadou Dial","Sea Freight Purchasing Manager, AGL (MSC)","Porte d'entrée achats transport groupe MSC.",0],
+["c1","nicolas-dupart-5792444","Nicolas Dupart","Directeur Projets Groupe, AGL","Appui au niveau direction.",0],
+["c1","elif-yazici-buyer","Elif Yazici","Industrial Buyer, AGL","Collègue.",0],
+["c1","iman-daouda-855b02175","Iman Daouda","Industrial Buyer, Port BU, AGL","Collègue.",0],
+["c1","matekyremy","Mateky Remy","Purchasing Officer, AGL","Collègue.",0],
+["c1","math%C3%A9o-h%C3%A9bert-69b065243","Mathéo Hébert","Chargé d'affaires achats, BU Portuaire, AGL","Collègue.",0],
+["c1","guy-ngom-356677189","Guy Ngom","Buyer, groupe Bolloré","Collègue.",0],
+["c1","thomas-sabot","Thomas Sabot","Acheteur IT Indirect, achats responsables","Collègue.",0],
+["c2","simon-quilliet-310","Simon Quilliet","Director Indirect Procurement EMEA (ex-Bolloré)","Décideur achats indirects avec un passé Bolloré en commun : contact n°1.",0],
+["c2","marcsajot","Marc Sajot","Senior Consultant, Sonnar (ex-acheteur Havas-Bolloré)","Cabinet de conseil achats : peut te présenter ou te recruter.",0],
+["c2","jean-marc-labalette-48aba072","Jean-Marc Labalette","Acheteur Projet FFE (ex-Achats Hors Production Bolloré)","Pierre peut faire l'intro.",1],
+["c2","mathieu-fontaine-48426519a","Mathieu Fontaine","Acheteur IT, BNP Paribas Real Estate (KEDGE MAI, ex-Bolloré)","Double lien KEDGE + Bolloré : cooptation BNP Paribas.",0],
+["c2","salwa-eliraqi-9119851b6","Salwa Eliraqi","MS Achat International KEDGE, ex-Industrial Buyer AGL","Même parcours : échange de pistes.",0],
+["c2","corentingourletsupplychainmanager","Corentin Gourlet","Procurement Manager, luxe (ex-Bolloré)","Porte d'entrée luxe.",0],
+["c2","brugereromane","Romane Brugère","Responsable Achats, Maisons Pariente (hôtellerie de luxe)","Hôtellerie = ta catégorie.",0],
+["c2","thomasdarbois","Thomas Darbois","DG STIME, DSI Groupement des Mousquetaires (ex-Bolloré Africa)","Offre acheteur ouverte aux Mousquetaires.",0],
+["c2","elombatguy","Guy Elombat","Manager Finance Transformation (ex-Bolloré TL achats)","Réseau conseil.",0],
+["c2","arnaud-dutang-0973b41","Arnaud Dutang","SVP Finance, CFO Europe (ex-CMA CGM)","Réseau CMA CGM.",0],
+["c2","chantal-teixeira","Chantal Teixeira","Directrice Générale PME/ETI (ex-Resp. achats Fujitsu)","Conseils, réseau PME.",0],
+["c2","ivana-pacail-23463b4b","Ivana Pacail","Chargée de mission DD, Blue Solutions (Bolloré)","Réseau interne Bolloré.",0],
+["c2","lisa-jayne-6252221b8","Lisa Jayne","Coordinatrice marketing (ex-assistante Direction Achats Bolloré)","Connaît toute la direction achats.",0],
+["c2","racim-lainceur-709aa9b2","Racim Lainceur","Railway operations (ex-Bolloré Transport & Logistics)","Réseau transport.",0],
+["c2","aliz%C3%A9e-armengaud-a73125ab","Alizée Armengaud","Head of Trading Media, Havas Edge","Pierre peut faire l'intro. Havas = ex-Bolloré.",1],
+["c2","officemanagerkarine-le-floch-0896aa59","Karine Le Floch","Senior Office Manager","Pierre peut faire l'intro.",1],
+["c2","xavier-jodeau-23327a9a","Xavier Jodeau","Responsable commercial, SOVATEX","Pierre peut faire l'intro.",1],
+["c2","marion-gauvry","Marion Gauvry","Account Manager / CSM","Pierre peut faire l'intro.",1],
+["c3","ondine-bedetti-37525748","Ondine Bedetti","Global Category Manager Mobility & MICE, L'Oréal","Probablement ton ancienne équipe : recommandation et postes ouverts.",0],
+["c3","eva-esteves-a1914a205","Eva Esteves","Buyer, Lagardère Travel Retail (ex-L'Oréal)","Porte d'entrée Travel Retail (aéroports).",0],
+["c3","sophia-jaffar-bandjee-536b25","Sophia Jaffar Bandjee","Acheteur, Direction Achats RTE (ex-L'Oréal)","Porte d'entrée RTE.",0],
+["c3","julien-collignon-943453108","Julien Collignon","Senior Buyer Haute Parfumerie, Coty (ex-L'Oréal)","Porte d'entrée Coty.",0],
+["c3","claudius-charri%C3%A8re","Claudius Charrière","Packaging Buyer, L'Oréal","Réseau acheteurs L'Oréal.",0],
+["c3","corentin-chapron","Corentin Chapron","Acheteur Junior Packaging, L'Oréal","Junior comme toi.",0],
+["c3","lucille-bessette-28b2921b","Lucille Bessette","Beauty Tech Finance Director (ex-achats L'Oréal)","Profil senior.",0],
+["c3","alice-dey-369b0a","Alice Dey","Sustainable Purchasing Development Manager","Achats responsables.",0],
+["c4","thibault-coste-765b26138","Thibault Coste","Acheteur Déplacements, Direction des Achats Groupe EDF","Même catégorie que toi, chez EDF.",0],
+["c4","jean-f%C3%A9lix-soula-71375183","Jean-Félix Soula","Acheteur Communication & Conseil, EDF","Indirects EDF.",0],
+["c4","c%C3%A9line-bernard-34b542153","Céline Bernard","Acheteur Prestations Intellectuelles, EDF","Indirects EDF.",0],
+["c4","caroline-wittier-09466b121","Caroline Wittier","Acheteuse Prestations Intellectuelles, EDF","Indirects EDF.",0],
+["c4","sophie-r-4b332587","Sophie R.","Acheteuse, Direction des Achats Groupe EDF","Réseau DAG.",0],
+["c4","jules-vergnory-814271172","Jules Vergnory","Acheteur DACI Grand Paris, EDF","Réseau DAG.",0],
+["c4","romain-francois-17733155","Romain François","Acheteur Projets, EDF","Réseau DAG.",0],
+["c4","carole-breton-4059aa101","Carole Breton","Direction Expertise des Données d'Achat, EDF","Réseau DAG.",0],
+["c5","noatrichet","Noa Trichet","Acheteur, Scamark – E.Leclerc","Offre Scamark ouverte : cooptation.",0],
+["c5","soulef-el-gahodi-7932546","Soulef El Gahodi","Acheteur IT / Consultante achat","Réseau conseil achats.",0],
+["c5","hassan-mesto","Hassan Mesto","Purchasing Apprentice, Valeo","Réseau Valeo.",0],
+["c5","julie--bernard","Julie Bernard","Category Manager Junior, Monoprix","Réseau Monoprix.",0],
+["c5","jean-roussilhe-69280720a","Jean Roussilhe","Alternant Nestlé","Offres Nestlé ouvertes.",0],
+["c5","yohan-fossey-48821b1a3","Yohan Fossey","Ingénieur logistique, ex-Schneider Electric","Réseau Schneider.",0],
+["c5","carlos-chauvin-9981b71b7","Carlos Chauvin","M2 MAI, ex-achats Thales","Réseau Thales.",0],
+["c6","christelle-navarre-64a446144","Christelle Navarre","Group Category Manager Mobility (Travel & Light Vehicles)","Exactement ton métier.",0],
+["c6","constance-vouteau-7808baba","Constance Vouteau","Procurement Category Manager Mobility, Air Liquide","Flotte automobile Europe.",0],
+["c6","antoine-skrzynski-4a705aa5","Antoine Skrzynski","Global Category Manager Fleet & Mobility, Equans","Mobilité.",0],
+["c6","?keywords=Timoth%C3%A9e%20Jeffroy","Timothée Jeffroy","Group Procurement Director (ex-Fleet & Mobility, Air Liquide)","Directeur achats issu de la mobilité.",0],
+["c6","pires-tamara-136611129","Tamara Pires","Global Fleet & Mobility Lead","Flotte.",0],
+["c6","ama%C3%A9-drikes-ab6437110","Amaé Drikes","Global Procurement Category Manager (ex-Travel & Events, Equans)","Travel et événements.",0],
+["c6","vincent-rousset-824551150","Vincent Rousset","Category Manager Ground Handling & Cargo, Air France-KLM","Achats aériens : valorise ton CCA.",0],
+["c6","jieshen2311","Jie Shen-Girard","Category Manager Energy, FM & Mobility, Mayoly Spindler","Mobilité et facilities.",0],
+["c6","graciela-vallejo-3583aa66","Graciela Vallejo","Category Manager Europe, Air Liquide","Achats Air Liquide.",0],
+["c6","ga%C3%ABlle-detraz-a2a313206","Gaëlle Detraz","Sr Category Manager Marketing & Events, Aon","Événements = MICE.",0],
+["c6","chloe-navatte","Chloé Navatte","Global Category Manager Prof. Services, Sodexo","Indirects.",0],
+["c6","ingrid-berg-8704a7b3","Ingrid Berg","Facilities Sourcing Category Manager, Dassault Systèmes","Facilities.",0],
+["c6","romainhenault","Romain Hénault","EV Category Manager, Michelin Connected Fleet","Flotte.",0],
+["c6","marion-travignet-a5a65437","Marion Travignet","Direct Procurement Manager, Edenred","Edenred = mobilité, avantages salariés.",0],
+["c6","romina-blois-398025141","Romina Blois","Contracts & Procurement Manager, TotalEnergies","TotalEnergies.",0],
+["c6","?keywords=Salom%C3%A9%20Abouab%20Haccoun","Salomé Abouab Haccoun","Global Indirect Purchaser, SMCP","Indirects mode.",0],
+["c6","?keywords=Pauline%20De%20Roo%20McCormick","Pauline De Roo","Senior Global Procurement Manager, McCormick","Agroalimentaire.",0],
+["c6","linda-el-maraghi-57226b70","Linda El Maraghi","Responsable Achats (ex-Indirects E.Leclerc)","Indirects retail.",0],
+["c7","veronique-potier-fontes","Véronique Potier-Fontes","Directeur des achats indirects Groupe, Hermès","Hermès recrute en achats.",0],
+["c7","olivier-blet","Olivier Blet","Directeur Achats Indirects, VINCI Construction","Offre VINCI ouverte.",0],
+["c7","magali-felix","Magali Felix","Directeur des Achats Indirects, Fnac Darty","Candidature spontanée.",0],
+["c7","claire-b-28a90a4b","Claire B.","Directeur des Achats Indirects, Eiffage","Candidature spontanée.",0],
+["c7","camille-daveri-guezet-87900290","Camille Daveri Guezet","Group Procurement Director Energy, Logistics & Indirects, Savencia","Indirects et logistique.",0],
+["c7","frederic-caroly-6a43a529","Frédéric Caroly","Directeur Achats Indirects, Audika","ETI.",0],
+["c7","lucette-grosprugny","Lucette G.","Directeur Achats Indirects, Céraclès","ETI.",0],
+["c7","?keywords=C%C3%A9dric%20Chemith","Cédric Chemith","Head of Procurement, Bastide Le Confort Médical","ETI santé.",0],
+["c7","vanessa-pinot-9029071","Vanessa Pinot","Head of Procurement Europe, Continental Foods","Agroalimentaire.",0],
+["c7","philippe-gauthier-66b45970","Philippe G.","Responsable Achats Contract Management, Andra","Nucléaire et public.",0],
+["c7","mariame-h-20708a12a","Mariame H.","IT Lead Buyer, BMW Group France","Achats IT automobile.",0],
+["c8","margaux-torres-8a6862118","Margaux Torres","Managing Consultant Achats & Supply Chain, Michael Page","Envoie ton CV.",0],
+["c8","florianventuri","Florian Venturi","Consultant Achats & Supply Chain, Michael Page","Envoie ton CV.",0],
+["c8","alexandre-guidez","Alexandre Guidez","Senior Manager, Page Personnel","Postes juniors et confirmés.",0],
+["c8","ludivine-cadet-888853230","Ludivine Cadet","Consultante, division Achats & Logistique","Acheteurs.",0],
+["c8","simonlebars","Simon Le Bars","Practice Leader Procurement, Morgan Philips","Cabinet spécialisé achats.",0],
+["c8","parsival-edjeou-6babb721a","Parsival Edjeou","Consultant Achats, Hays","Hays Achats.",0],
+["c8","ayakechar","Aya Kechar","Consultante Achats, transit et maritime","Profil transport (AGL).",0],
+["c8","andr%C3%A9e-samba-167322170","Andrée Samba","Consultante recrutement, Expectra","Intérim cadres, CDD rapides.",0]
+];
+
+/* ---------- ENTREPRISES ---------- [secteur, nom, angle, pourquoi / point d'entrée, site] */
+const SECT=["Aérien & voyage","Mobilité & flottes","Transport & logistique","Luxe & beauté","Énergie & industrie","Services, banque, tech","Retail & conso","Public","Conseil achats"];
+const COS=[
+["Aérien & voyage","Air France-KLM","Aérien","Category managers ground handling, catering, travel. Contact : Vincent Rousset.","recrutement.airfrance.com"],
+["Aérien & voyage","Air France Industries KLM E&M","Aérien","Achats maintenance, pièces, sous-traitance.","afiklmem.com"],
+["Aérien & voyage","Transavia France","Aérien","Équipe achats à Orly.","transavia.com"],
+["Aérien & voyage","Corsair","Aérien","Achats cabine et catering.","flycorsair.com"],
+["Aérien & voyage","Air Caraïbes / French Bee","Aérien","Groupe Dubreuil, achats cabine.","groupedubreuil.com"],
+["Aérien & voyage","Groupe ADP","Aérien","Achats aéroportuaires, services, facilities.","parisaeroport.fr"],
+["Aérien & voyage","Servair / Newrest / Gate Gourmet","Aérien","Catering aérien.","servair.fr"],
+["Aérien & voyage","Lagardère Travel Retail","Aérien","Boutiques en aéroport. Contact : Eva Esteves.","lagardere-tr.com"],
+["Aérien & voyage","Areas / SSP / Elior","Aérien","Restauration en aéroports (offre Areas ouverte).","areas.com"],
+["Aérien & voyage","Amex GBT / CWT / FCM / BCD / Navan","Travel","Agences de voyages d'affaires : côté fournisseur.","sites carrières"],
+["Aérien & voyage","Accor / B&B Hotels / Louvre Hotels","Travel","Hôtellerie : comptes corporate, achats.","careers.accor.com"],
+["Aérien & voyage","Club Med / Pierre & Vacances","Travel","Achats hors production tourisme.","sites carrières"],
+["Aérien & voyage","Safran / Thales / Airbus / Dassault / Daher","Aérien","Aéronautique, nombreuses offres achats.","sites carrières"],
+["Mobilité & flottes","JCDecaux","Mobilité","Offre Acheteur Indirect Mobilité ouverte.","jcdecaux.com"],
+["Mobilité & flottes","Ayvens (Société Générale)","Mobilité","Leader du leasing de flottes.","ayvens.com"],
+["Mobilité & flottes","Arval (BNP Paribas)","Mobilité","Leasing de flottes, Rueil.","arval.com"],
+["Mobilité & flottes","Aramisauto","Mobilité","2 offres acheteur ouvertes.","aramisauto.com"],
+["Mobilité & flottes","Europcar / Hertz / Sixt / Getaround","Mobilité","Loueurs : achats véhicules et services.","sites carrières"],
+["Mobilité & flottes","Free2Move / Renault Mobilize","Mobilité","Mobilité des constructeurs.","sites carrières"],
+["Mobilité & flottes","Uber / Bolt / G7","Mobilité","Mobilité urbaine.","sites carrières"],
+["Mobilité & flottes","SNCF / RATP / Keolis / Transdev","Mobilité","Achats mobilité, marchés publics.","sncf.com/emploi"],
+["Mobilité & flottes","Edenred / Pluxee / Swile","Mobilité","Avantages salariés, cartes carburant. Contact : Marion Travignet.","sites carrières"],
+["Mobilité & flottes","Michelin Connected Fleet / Geotab","Mobilité","Télématique flottes. Contact : Romain Hénault.","sites carrières"],
+["Mobilité & flottes","Izivia (EDF) / Electra / Ionity","Mobilité","Recharge électrique, Izivia = groupe EDF.","sites carrières"],
+["Transport & logistique","MSC / AGL / Medlog / MSC Croisières","Réseau","Groupe de ton dernier employeur : mobilité interne.","msc.com/careers"],
+["Transport & logistique","CMA CGM / CEVA Logistics","Transport","A racheté Bolloré Logistics. Achats indirects groupe.","cmacgm-group.com"],
+["Transport & logistique","GEODIS","Transport","Achats transport et indirects, Levallois.","geodis.com"],
+["Transport & logistique","DHL / Kuehne+Nagel / DSV / Expeditors","Transport","Transitaires internationaux.","sites carrières"],
+["Transport & logistique","FM Logistic / ID Logistics / GXO / Dachser","Transport","Logisticiens.","sites carrières"],
+["Transport & logistique","La Poste / Geopost / Chronopost","Indirects","Achats indirects importants.","laposterecrute.fr"],
+["Transport & logistique","Mondial Relay","Indirects","Offre acheteur immobilier ouverte.","sites carrières"],
+["Transport & logistique","Brittany Ferries / Ponant / LDA","Travel","Maritime et croisière.","sites carrières"],
+["Transport & logistique","Bolloré / Vivendi / Canal+ / Havas","Réseau","Ton groupe d'origine. Kevin Roca couvre Bolloré & Vivendi.","bollore.com"],
+["Luxe & beauté","L'Oréal (GBS Sourcing)","Réseau","Ton ancienne équipe Mobility & MICE.","careers.loreal.com"],
+["Luxe & beauté","LVMH (Bon Marché, Dior, Sephora…)","Indirects","Offre Acheteur Indirect au Bon Marché.","lvmh.com"],
+["Luxe & beauté","Hermès","Indirects","Plusieurs offres achats. Dir. indirects : V. Potier-Fontes.","hermes.com"],
+["Luxe & beauté","Chanel / Cartier / Van Cleef","Indirects","Offres CDD en cours.","sites carrières"],
+["Luxe & beauté","Kering","Travel","Global procurement à Paris.","kering.com"],
+["Luxe & beauté","SMCP","Indirects","Global Indirect Purchaser identifié.","smcp.com"],
+["Luxe & beauté","Coty / Puig / Clarins / Pierre Fabre","Indirects","Beauté. Contact Coty : Julien Collignon.","sites carrières"],
+["Luxe & beauté","Galeries Lafayette / Printemps / Lacoste","Indirects","Retail premium.","sites carrières"],
+["Énergie & industrie","EDF / Enedis / RTE / Framatome / Dalkia","Réseau","Ton ancien employeur. Offres EDF et Framatome ouvertes.","edf.fr/edf-recrute"],
+["Énergie & industrie","Engie / Equans / GRDF","Travel","Category managers Mobility identifiés chez Equans.","engie.com"],
+["Énergie & industrie","TotalEnergies","Indirects","Achats indirects à La Défense.","careers.totalenergies.com"],
+["Énergie & industrie","Air Liquide","Mobilité","Category managers Mobility et Fleet identifiés.","airliquide.com"],
+["Énergie & industrie","Orano / Andra / CEA","Public","Nucléaire, marchés réglementés.","sites carrières"],
+["Énergie & industrie","Schneider / Legrand / Saint-Gobain / Michelin / Valeo","Indirects","Grands industriels.","sites carrières"],
+["Énergie & industrie","VINCI / Bouygues / Eiffage / Spie","Indirects","Offres VINCI et Bouygues ouvertes.","sites carrières"],
+["Énergie & industrie","Veolia / Suez","Indirects","Services à l'environnement.","sites carrières"],
+["Énergie & industrie","Sanofi / Servier / Ipsen","Travel","Pharma : achats indirects structurés.","sites carrières"],
+["Services, banque, tech","BNP Paribas (+ Real Estate)","Réseau","Contact : Mathieu Fontaine (KEDGE, ex-Bolloré).","group.bnpparibas"],
+["Services, banque, tech","Société Générale / Crédit Agricole / BPCE","Travel","Énormes volumes de déplacements.","sites carrières"],
+["Services, banque, tech","AXA / Allianz / Generali / Covéa / Aon","Travel","AXA via Ayoub Ramdane.","sites carrières"],
+["Services, banque, tech","KPMG / Deloitte / EY / PwC / Capgemini","Travel","Les consultants voyagent beaucoup. Offre KPMG ouverte.","sites carrières"],
+["Services, banque, tech","Orange / SFR / Bouygues Telecom","Indirects","Télécoms.","sites carrières"],
+["Services, banque, tech","Dassault Systèmes / OVHcloud / Ubisoft","Indirects","Équipes achats actives.","sites carrières"],
+["Services, banque, tech","France Télévisions / TF1 / M6 / Radio France","Indirects","Offre France TV ouverte.","sites carrières"],
+["Services, banque, tech","Publicis / Comexposium / GL events / Viparis","Travel","Événementiel = MICE.","sites carrières"],
+["Services, banque, tech","Sodexo / Elior / ISS / Onet","Indirects","Facility management.","sites carrières"],
+["Services, banque, tech","Paris Saint-Germain / FFF","Travel","Offre Acheteur Matchday ouverte.","sites carrières"],
+["Retail & conso","Carrefour / Mousquetaires / E.Leclerc / Monoprix","Indirects","Offres Scamark et Mousquetaires ouvertes.","sites carrières"],
+["Retail & conso","Fnac Darty / Decathlon / Leroy Merlin","Indirects","Dir. indirects Fnac Darty : Magali Felix.","sites carrières"],
+["Retail & conso","Danone / Nestlé / Pernod Ricard / Heineken","Indirects","Offre Heineken achats indirects ouverte.","sites carrières"],
+["Retail & conso","Savencia / Lactalis / Sodiaal","Indirects","Savencia : C. Daveri Guezet.","sites carrières"],
+["Retail & conso","Bertrand / Burger King / McDonald's / Picard","Indirects","Offres ouvertes.","sites carrières"],
+["Public","UGAP / Resah / Direction des Achats de l'État","Public","Centrales d'achat public.","choisirleservicepublic.gouv.fr"],
+["Public","Ministères (Affaires étrangères, Armées)","Public","Offres ouvertes.","choisirleservicepublic.gouv.fr"],
+["Public","Ville de Paris / Région IDF / Départements","Public","Acheteurs territoriaux.","emploi-territorial.fr"],
+["Public","AP-HP / Institut Curie / CHU","Public","Achats hospitaliers.","sites carrières"],
+["Public","Banque de France / Caisse des Dépôts / AMF","Public","Offre AMF ouverte.","sites carrières"],
+["Conseil achats","KLB Group","Conseil","Consultants acheteurs, marchés publics et indirects.","klb-group.com"],
+["Conseil achats","Sonnar","Réseau","Contact : Marc Sajot (ex-Havas-Bolloré).","sites carrières"],
+["Conseil achats","Efficio / Inverto (BCG) / Kepler / Elcimai","Conseil","Conseil achats, recrutent des juniors.","sites carrières"],
+["Conseil achats","Akkurate / Buy.O / Argon & Co","Conseil","Conseil achats.","sites carrières"],
+["Conseil achats","Davidson / Astek / agap2 / Innoha / MEO","Conseil","Offres « acheteur » ouvertes.","sites carrières"],
+["Conseil achats","Apex Procurement / Leyton","Conseil","Optimisation des frais généraux.","sites carrières"]
+];
+
+const MSGS=[
+["Demande de recommandation (ancien manager)","Bonjour Kevin, j'espère que tu vas bien. Mon CDD chez AGL s'est terminé fin octobre et je cherche un poste d'acheteur hors production (Travel/Mobilité ou indirects). Accepterais-tu d'écrire une courte recommandation LinkedIn sur notre travail ensemble (AO, négociations, contrats mobilité) ? Et si tu entends parler d'un poste, je suis preneur. Merci beaucoup, Mathéo"],
+["Invitation : ancien Bolloré/AGL parti ailleurs","Bonjour [Prénom], je suis passé par la Direction Achats du Groupe Bolloré (Mobilité) puis par AGL, comme vous. Je cherche un poste d'acheteur hors production et votre parcours chez [Entreprise] m'intéresse. Auriez-vous 10 min pour échanger ? Mathéo"],
+["Invitation : Category Manager Travel / Mobility","Bonjour [Prénom], acheteur Travel/MICE/Mobilité (L'Oréal GBS, Bolloré), je suis disponible et très intéressé par les achats chez [Entreprise]. Votre équipe recrute-t-elle, ou pourriez-vous m'orienter ? Merci, Mathéo"],
+["Invitation : directeur achats","Bonjour [Prénom], acheteur hors production (EDF, L'Oréal, Bolloré), je suis disponible immédiatement. Je serais ravi de rejoindre la direction achats de [Entreprise]. Puis-je vous adresser mon CV ? Mathéo Irigaray"],
+["Recruteur en cabinet (après connexion)","Bonjour [Prénom], merci pour la connexion. Acheteur Hors Production (Bac+6 KEDGE MAI), 2,5 ans en grands groupes : EDF (achats industriels, marchés publics), L'Oréal (AO Hôtel Global, MICE, Travel), Bolloré/AGL (Mobilité, Travel, IT, Facilities). Disponible immédiatement, en Île-de-France, en CDI ou CDD. Je vous joins mon CV et serais ravi d'échanger sur vos postes Achats en cours. Bien à vous, Mathéo Irigaray"],
+["Pitch oral de 30 secondes","Je suis acheteur hors production, spécialisé sur les catégories Travel, MICE et Mobilité. Chez L'Oréal, j'ai participé à l'appel d'offres hôtelier mondial. Chez Bolloré, j'ai géré pendant 16 mois la catégorie Mobilité groupe : appels d'offres, négociations, contrats-cadres, suivi fournisseurs et RSE. Chez Africa Global Logistics, j'ai ensuite couvert Travel, IT et Facilities. J'ai aussi une base en achats industriels et marchés publics acquise chez EDF. Je cherche un poste où je prends en main un portefeuille de catégories indirectes et où je crée de la performance."]
+];
+
+const WEEK=[
+"Mettre à jour LinkedIn : titre, Infos, compétences, langues, « Open to Work » (onglet Mon profil)",
+"Postuler à JCDecaux, Heineken, Bon Marché, KPMG et Lynkus",
+"Demander une recommandation à Kevin Roca et Jeanne Chauveau",
+"Écrire à Simon Quilliet, Marc Sajot et Mathieu Fontaine",
+"Envoyer le CV à Margaux Torres (Michael Page) et Simon Le Bars (Morgan Philips)"
+];
+const PLAN=[
+["Jours 1 à 2",["S'inscrire à France Travail et à l'APEC","Mettre à jour le profil LinkedIn (titre, Infos, compétences, langues)","Activer « Open to Work » (visible des recruteurs uniquement)","Supprimer le numéro de téléphone du post de 2023","Faire un CV d'une page orienté « Hors Production »"]],
+["Jours 2 à 3",["Demander 3 recommandations : Kevin Roca, Jeanne Chauveau, tuteur L'Oréal","Recontacter Christian Turlan et Martin Krafft (EDF)"]],
+["Semaine 1",["Postuler aux offres A (objectif : 15 candidatures)","Contacter les cercles 1 et 2 du réseau (objectif : 20 messages)"]],
+["Semaine 2",["Contacter les Category Managers et les alumni KEDGE (25 messages)","Envoyer le CV aux recruteurs","10 candidatures spontanées dans l'onglet Entreprises","Obtenir 3 cafés ou visios"]],
+["Semaine 3",["Contacter les directeurs achats","Relancer à J+7 tous les messages sans réponse","Préparer les entretiens (onglet Messages)"]],
+["Semaine 4",["Faire le bilan : quels canaux répondent ?","Doubler l'effort sur ceux qui marchent","S'ouvrir aux CDD et missions de conseil si besoin"]]
+];
+
+/* ---------- FICHES ENTRETIEN ----------
+   m = mots qui relient la fiche aux offres ; c = contacts [slug, nom, rôle] */
+const FICHES=[
+{n:"JCDecaux",m:["jcdecaux"],s:"Communication extérieure",
+ what:"Numéro un mondial de la communication extérieure : mobilier urbain (abribus, vélos en libre-service), publicité dans les transports (aéroports, métros, gares) et affichage. Siège à Neuilly-sur-Seine, sites techniques en Île-de-France dont Plaisir.",
+ why:"L'offre porte sur les achats indirects Mobilité : c'est exactement ce que tu as géré chez Bolloré. JCDecaux est aussi très présent dans les aéroports, ce qui permet de glisser ton intérêt pour l'aérien.",
+ e:["Flotte de véhicules des équipes techniques qui entretiennent le mobilier urbain : coût total, entretien, sinistres.","Électrification de cette flotte et réduction des émissions, en lien avec les engagements RSE et les exigences des villes clientes.","Déplacements professionnels d'un groupe présent dans de nombreux pays."],
+ pitch:"J'ai géré la catégorie Mobilité groupe chez Bolloré : appels d'offres, contrats-cadres et suivi des fournisseurs. Je peux être opérationnel rapidement sur votre flotte et vos déplacements.",
+ c:[["christelle-navarre-64a446144","Christelle Navarre","Category Manager Mobility dans un autre groupe : pour comparer les pratiques"]],
+ q:["Quelle est la taille de la flotte et quelle part est déjà électrifiée ?","Les achats mobilité sont-ils gérés au niveau France ou au niveau groupe ?","Quels sont les grands appels d'offres prévus sur les 12 prochains mois ?"]},
+{n:"HEINEKEN France",m:["heineken"],s:"Brasserie",
+ what:"Filiale française du brasseur néerlandais Heineken, l'un des tout premiers brasseurs mondiaux. Siège à Rueil-Malmaison, brasseries en régions, marques Heineken, Pelforth, Desperados, Affligem.",
+ why:"Poste d'achats indirects dans un groupe international : tu peux mettre en avant l'étendue de tes catégories (Travel, IT, Facilities, Mobilité).",
+ e:["Achats marketing et événementiels (sponsoring, salons, opérations en bars et restaurants).","Flotte des commerciaux qui sillonnent les cafés-hôtels-restaurants.","Programme de développement durable du groupe : décarbonation, transport, emballages."],
+ pitch:"J'ai couvert plusieurs catégories indirectes en grand groupe : déplacements, événementiel, flotte, IT, facilities. Je sais travailler avec des prescripteurs très différents.",
+ c:[],
+ q:["Quelles catégories seraient dans mon portefeuille ?","Comment s'articulent les achats France et les achats groupe aux Pays-Bas ?","Quelle place prennent les critères RSE dans le choix des fournisseurs ?"]},
+{n:"Le Bon Marché (LVMH)",m:["bon marché"],s:"Luxe, grands magasins",
+ what:"Grand magasin parisien historique du groupe LVMH, rive gauche. Le groupe comprend aussi La Grande Épicerie de Paris et la Samaritaine.",
+ why:"Achats indirects dans le luxe : ton passage chez L'Oréal parle beaucoup ici. Les attentes de service et de qualité sont très élevées.",
+ e:["Facilities d'un bâtiment historique très fréquenté : maintenance, sécurité, nettoyage.","Événements en magasin, expositions, opérations clients.","Achats responsables, conformes aux engagements environnementaux de LVMH."],
+ pitch:"Chez L'Oréal, j'ai appris à acheter pour une marque premium où la qualité de service compte autant que le prix. Chez Bolloré, j'ai géré des contrats-cadres et le suivi de la performance des fournisseurs.",
+ c:[],
+ q:["Quelles sont les priorités achats pour la Samaritaine et la Grande Épicerie ?","Travaillez-vous avec les achats groupe LVMH sur certaines catégories ?","Comment mesurez-vous la qualité de service des prestataires ?"]},
+{n:"KPMG France",m:["kpmg"],s:"Audit et conseil",
+ what:"Un des grands cabinets d'audit, d'expertise comptable et de conseil (Big Four). Siège à Paris-La Défense (Courbevoie), plusieurs milliers de collaborateurs en France.",
+ why:"Le poste est sur l'IT indirect. Dans un cabinet, les déplacements et l'IT font partie des plus gros postes de dépenses : ton profil Travel est un vrai bonus.",
+ e:["Licences logicielles, matériel et services cloud pour des milliers de consultants.","Déplacements et hôtellerie des consultants chez les clients.","Sécurité des données et conformité des fournisseurs."],
+ pitch:"J'ai couvert les achats IT chez AGL et les déplacements chez L'Oréal et Bolloré : deux catégories clés pour un cabinet de conseil.",
+ c:[],
+ q:["Quelle est la répartition entre achats IT et autres catégories dans l'équipe ?","Utilisez-vous un outil e-procurement (Coupa, Ariba…) ?","Comment travaillez-vous avec le réseau KPMG international ?"]},
+{n:"VINCI",m:["vinci"],s:"Concessions et construction",
+ what:"Groupe mondial de concessions (autoroutes, aéroports via VINCI Airports) et de construction. Siège à Nanterre, organisation très décentralisée par pôles et filiales.",
+ why:"Grand groupe avec une forte culture achats. VINCI Airports permet aussi de parler de ton intérêt pour l'aérien.",
+ e:["Mutualisation des achats indirects entre des filiales très autonomes.","Énormes flottes de véhicules et d'engins de chantier.","Décarbonation des chantiers et des achats."],
+ pitch:"J'ai travaillé dans des groupes décentralisés (Bolloré, AGL) où il faut convaincre des filiales de suivre les contrats groupe.",
+ c:[["olivier-blet","Olivier Blet","Directeur Achats Indirects, VINCI Construction"]],
+ q:["Le poste est-il rattaché au groupe ou à un pôle ?","Comment les filiales adhèrent-elles aux accords-cadres ?","Quels outils de suivi des dépenses utilisez-vous ?"]},
+{n:"EDF",m:["edf"],s:"Énergie",
+ what:"Premier producteur et fournisseur d'électricité en France, détenu par l'État. Direction des Achats Groupe très structurée, soumise en grande partie aux règles de la commande publique.",
+ why:"Ton ancien employeur : tu connais déjà les processus, SAP et les règles de mise en concurrence. Ça rassure énormément.",
+ e:["Programme de nouveaux réacteurs nucléaires et prolongation du parc existant.","Sécurisation de la chaîne d'approvisionnement industrielle.","Achats indirects groupe : déplacements, prestations intellectuelles, IT."],
+ pitch:"J'ai déjà été acheteur à la Direction des Achats Groupe d'EDF. Depuis, j'ai ajouté une expérience en achats internationaux chez L'Oréal et Bolloré.",
+ c:[["thibault-coste-765b26138","Thibault Coste","Acheteur Déplacements, Direction des Achats Groupe"]],
+ q:["Comment l'équipe a-t-elle évolué depuis mon stage ?","Quelle part des gros équipements est achetée à l'international ?","Quel accompagnement pour monter en compétence sur les gros équipements ?"]},
+{n:"Framatome",m:["framatome"],s:"Nucléaire",
+ what:"Spécialiste des chaudières nucléaires, du combustible et des services aux centrales. Filiale majoritaire d'EDF. Siège à Courbevoie, sites industriels en France et à l'étranger.",
+ why:"Même univers qu'EDF, avec une dimension internationale plus forte : parfait pour ton profil d'acheteur international.",
+ e:["Montée en charge industrielle liée aux nouveaux programmes nucléaires.","Qualification et contrôle qualité très stricts des fournisseurs.","Achats transport et logistique de composants hors normes."],
+ pitch:"Chez EDF, j'ai acheté des pièces pour les centrales nucléaires. J'en connais les exigences de qualité et les règles de mise en concurrence.",
+ c:[],
+ q:["Quels types d'équipements et quels pays fournisseurs ?","Comment se passe la qualification d'un nouveau fournisseur ?","Quelle collaboration avec les achats EDF ?"]},
+{n:"Aramisauto",m:["aramisauto"],s:"Automobile en ligne",
+ what:"Leader français de la vente de voitures d'occasion et neuves en ligne, au sein d'Aramis Group, dont Stellantis est actionnaire majoritaire. Siège à Arcueil, centres de reconditionnement en régions.",
+ why:"Univers automobile et mobilité. L'offre demande une 3e langue (italien ou allemand) : sois transparent sur ton niveau.",
+ e:["Achat de véhicules auprès de constructeurs, loueurs et particuliers, en France et en Europe.","Coûts de reconditionnement : pièces, peinture, sous-traitance.","Transport des véhicules jusqu'aux clients."],
+ pitch:"J'ai géré une catégorie mobilité dans un grand groupe et j'ai l'habitude de négocier en anglais avec des fournisseurs internationaux.",
+ c:[],
+ q:["Quelle part des achats se fait à l'étranger ?","Quels indicateurs suivez-vous : marge par véhicule, délai de rotation ?","Comment se passe le travail avec les autres pays d'Aramis Group ?"]},
+{n:"Paris Saint-Germain",m:["paris saint-germain"],s:"Sport et événementiel",
+ what:"Club de football professionnel. Le poste concerne l'hospitalité les jours de match au Parc des Princes : loges, restauration, prestataires événementiels.",
+ why:"C'est du MICE à grande échelle : tu peux t'appuyer sur ta stratégie MICE chez L'Oréal et ton appel d'offres hôtelier.",
+ e:["Qualité constante des prestations premium à chaque match.","Gestion de nombreux prestataires sur des délais très courts.","Optimisation des coûts sans dégrader l'expérience client."],
+ pitch:"Chez L'Oréal, j'ai travaillé sur la stratégie MICE mondiale et un grand appel d'offres hôtelier : je connais les prestataires de l'événementiel et de l'hospitalité.",
+ c:[],
+ q:["Combien de prestataires sont mobilisés un soir de match ?","Comment est mesurée la satisfaction des clients en loge ?","Le poste couvre-t-il aussi les autres sections et événements du club ?"]},
+{n:"Air France-KLM",m:["air france"],s:"Aérien",
+ what:"Groupe aérien franco-néerlandais : Air France, KLM, Transavia. Direction des achats groupe organisée par catégories (services au sol, catering, maintenance, IT, indirects).",
+ why:"La combinaison achats et CCA est rare : tu connais la cabine de l'intérieur. À utiliser pour des postes d'acheteur, pas de personnel navigant.",
+ e:["Décarbonation : carburants durables, renouvellement de la flotte.","Coûts des services au sol, du catering et de la maintenance.","Performance et ponctualité des prestataires dans les aéroports."],
+ pitch:"Acheteur Travel et Mobilité, je connais aussi le métier de personnel navigant grâce à mon CCA. Je comprends ce qu'une prestation cabine ou au sol implique en opérationnel.",
+ c:[["vincent-rousset-824551150","Vincent Rousset","Category Manager Ground Handling & Cargo"]],
+ q:["Comment les achats Air France et KLM sont-ils répartis ?","Quelles catégories recrutent des profils juniors ?","Comment la RSE est-elle intégrée aux contrats de services aéroportuaires ?"]},
+{n:"Groupe ADP",m:["adp"],s:"Aéroports",
+ what:"Gestionnaire des aéroports parisiens (Roissy-Charles de Gaulle, Orly, Le Bourget) et de nombreux aéroports à l'international.",
+ why:"Achats aéroportuaires, souvent soumis à des règles de mise en concurrence : ton expérience EDF et ton intérêt pour l'aérien se rejoignent.",
+ e:["Services aéroportuaires : nettoyage, sûreté, accueil, maintenance.","Grands travaux d'infrastructure.","Neutralité carbone des aéroports."],
+ pitch:"J'ai une double expérience achats privés et achats réglementés (EDF), et je connais l'aérien côté opérationnel grâce au CCA.",
+ c:[],
+ q:["Quelles règles de mise en concurrence s'appliquent ?","Quelles catégories sont gérées par l'équipe ?","Quels sont les grands projets à venir ?"]},
+{n:"L'Oréal",m:["l'oréal","loreal"],s:"Beauté",
+ what:"Numéro un mondial de la beauté. Les achats indirects mondiaux sont regroupés dans Global Business Services, à Clichy.",
+ why:"Ton ancien employeur : tu connais l'équipe Mobility & MICE et ses outils. Un retour est tout à fait crédible.",
+ e:["Optimisation des déplacements et des événements à l'échelle mondiale.","Réduction de l'empreinte carbone des voyages d'affaires.","Harmonisation des contrats entre les zones."],
+ pitch:"J'ai participé à l'appel d'offres Hôtel Global et à la stratégie MICE de GBS. Depuis, j'ai géré seul une catégorie Mobilité chez Bolloré.",
+ c:[["ondine-bedetti-37525748","Ondine Bedetti","Global Category Manager Mobility & MICE"]],
+ q:["Où en est le déploiement de l'appel d'offres hôtelier ?","Quels postes juniors ou confirmés sont ouverts dans GBS ?","Comment l'équipe a-t-elle évolué ?"]},
+{n:"CMA CGM / CEVA Logistics",m:["cma cgm","ceva"],s:"Transport maritime et logistique",
+ what:"Groupe français parmi les tout premiers armateurs mondiaux, basé à Marseille. Sa filiale CEVA Logistics a racheté Bolloré Logistics.",
+ why:"Tu connais l'univers Bolloré et la logistique internationale. D'anciens collègues de Bolloré Logistics y travaillent probablement aujourd'hui.",
+ e:["Intégration de Bolloré Logistics dans CEVA : harmonisation des contrats fournisseurs.","Achats indirects d'un groupe très international.","Décarbonation du transport."],
+ pitch:"J'ai travaillé à la Direction des Achats du groupe Bolloré, puis chez AGL. Je connais la culture de Bolloré Logistics et les enjeux de la logistique internationale.",
+ c:[["arnaud-dutang-0973b41","Arnaud Dutang","Ancien de CMA CGM"]],
+ q:["Où en est l'intégration de Bolloré Logistics ?","Les achats indirects sont-ils centralisés à Marseille ?","Quelles catégories sont prioritaires ?"]},
+{n:"MSC / Africa Global Logistics",m:["msc","africa global"],s:"Transport maritime et logistique",
+ what:"MSC est le premier armateur mondial. Il a racheté Bolloré Africa Logistics, devenue Africa Global Logistics (AGL), présente dans de nombreux pays africains.",
+ why:"Ton dernier employeur : une mobilité interne ou un retour dans une autre entité du groupe (MSC Croisières, Medlog) est possible.",
+ e:["Achats industriels pour les terminaux portuaires.","Achats transport maritime et fret.","Achats hors production d'un groupe en forte croissance."],
+ pitch:"Je connais déjà les équipes, les processus et les fournisseurs d'AGL.",
+ c:[["mamadou-dial-854945202","Mamadou Dial","Sea Freight Purchasing Manager, AGL"],["nicolas-dupart-5792444","Nicolas Dupart","Directeur Projets Groupe, AGL"]],
+ q:["Des postes s'ouvrent-ils dans d'autres entités du groupe MSC ?","Un CDI est-il envisageable sur la catégorie hors production ?","Quelles opportunités à l'international ?"]},
+{n:"Air Liquide",m:["air liquide"],s:"Gaz industriels",
+ what:"Leader mondial des gaz industriels et médicaux. Siège à Paris, équipe achats européenne et groupe très structurée.",
+ why:"Plusieurs Category Managers Mobility et Fleet repérés : c'est une équipe proche de ta spécialité.",
+ e:["Flottes de véhicules en Europe et leur électrification.","Achats indirects harmonisés entre pays.","Engagements climat du groupe."],
+ pitch:"J'ai géré une catégorie Mobilité groupe : appels d'offres flottes et déplacements, négociation, suivi des contrats.",
+ c:[["constance-vouteau-7808baba","Constance Vouteau","Procurement Category Manager Mobility, Car Fleet Europe"],["graciela-vallejo-3583aa66","Graciela Vallejo","Category Manager Europe"]],
+ q:["Comment est organisée la catégorie Mobilité en Europe ?","Où en est l'électrification de la flotte ?","Recrutez-vous des acheteurs juniors en support des category managers ?"]},
+{n:"Equans (groupe Bouygues)",m:["equans"],s:"Services multitechniques",
+ what:"Leader des services multitechniques (énergie, génie climatique, facility management), racheté par Bouygues. Siège à Courbevoie.",
+ why:"Un Global Category Manager Fleet & Mobility repéré, et une offre d'acheteur ouverte.",
+ e:["Très grosse flotte de véhicules de techniciens.","Intégration dans le groupe Bouygues.","Achats indirects et sous-traitance."],
+ pitch:"Ma spécialité Mobilité colle directement à un enjeu majeur d'Equans : la flotte des techniciens.",
+ c:[["antoine-skrzynski-4a705aa5","Antoine Skrzynski","Global Category Manager Fleet & Mobility"]],
+ q:["Combien de véhicules compte la flotte et comment est-elle gérée ?","Quelles synergies avec les achats Bouygues ?","Quelles catégories pour un acheteur junior ?"]},
+{n:"Hermès",m:["hermès","hermes"],s:"Luxe",
+ what:"Maison de luxe française indépendante : maroquinerie, soie, prêt-à-porter, parfums. Nombreuses offres achats en cours.",
+ why:"Culture de l'excellence et du savoir-faire. Ton expérience L'Oréal est un bon point d'entrée.",
+ e:["Achats indirects d'une maison en forte croissance.","Exigence de qualité et image de marque.","Achats responsables."],
+ pitch:"J'ai acheté pour un groupe premium (L'Oréal) et géré des contrats-cadres exigeants chez Bolloré.",
+ c:[["veronique-potier-fontes","Véronique Potier-Fontes","Directeur des achats indirects Groupe"]],
+ q:["Comment la direction achats indirects est-elle organisée ?","Quelles valeurs de la maison se retrouvent dans les achats ?","Quelles perspectives d'évolution ?"]},
+{n:"BNP Paribas",m:["bnp"],s:"Banque",
+ what:"Première banque de la zone euro. Achats groupe très structurés, filiales dont BNP Paribas Real Estate et Arval (leasing de flottes).",
+ why:"Arval est une cible Mobilité naturelle. Mathieu Fontaine (KEDGE MAI, ex-Bolloré) est acheteur IT chez BNP Paribas Real Estate.",
+ e:["Déplacements professionnels à très grande échelle.","Achats IT et prestations intellectuelles.","Conformité réglementaire des fournisseurs."],
+ pitch:"J'ai couvert les déplacements, l'IT et la mobilité dans des groupes internationaux, avec un fort suivi de la conformité fournisseurs.",
+ c:[["mathieu-fontaine-48426519a","Mathieu Fontaine","Acheteur IT, BNP Paribas Real Estate"]],
+ q:["Quelles entités recrutent en achats en ce moment ?","Comment les achats groupe et filiales travaillent-ils ensemble ?","Quel est le poids de la conformité dans le processus ?"]},
+{n:"Resah",m:["resah"],s:"Achat public, santé",
+ what:"Centrale d'achat publique spécialisée dans la santé : elle mutualise les achats des hôpitaux et établissements médico-sociaux.",
+ why:"Achat public (ton expérience EDF) et catégorie services généraux, proche des facilities que tu as gérées chez AGL.",
+ e:["Mutualisation des achats pour de nombreux établissements.","Respect strict du Code de la commande publique.","Maîtrise des dépenses hospitalières."],
+ pitch:"Chez EDF, j'ai mené des procédures de mise en concurrence avec avis de marché. Chez AGL, j'ai géré des achats Facilities.",
+ c:[],
+ q:["Quels marchés de services généraux sont à renouveler ?","Combien d'établissements adhèrent à ces marchés ?","Comment se passe la rédaction des pièces de marché ?"]},
+{n:"Ministère de l'Europe et des Affaires étrangères",m:["affaires étrangères"],s:"Administration",
+ what:"Ministère chargé de la diplomatie, avec un réseau d'ambassades et de consulats dans le monde entier.",
+ why:"Achat public avec une dimension internationale. Les déplacements sont un poste majeur pour un ministère des Affaires étrangères.",
+ e:["Marchés de déplacements et d'hébergement pour les agents.","Achats pour le réseau à l'étranger.","Rédaction juridique des marchés publics."],
+ pitch:"Je connais la commande publique (EDF) et la catégorie Travel (L'Oréal, Bolloré). Les deux réunies correspondent à ce poste.",
+ c:[],
+ q:["Quel est le statut du poste : contractuel, durée ?","Quels marchés seraient dans mon périmètre ?","Comment travaillez-vous avec la Direction des Achats de l'État ?"]}
+];
+function renderFiches(){
+  const q=(document.getElementById('qFi').value||'').toLowerCase();
+  const list=FICHES.filter(f=>!q||JSON.stringify(f).toLowerCase().includes(q));
+  document.getElementById('fiches').innerHTML=list.length?list.map(f=>{
+    const id='fi-'+f.n.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+    const jobs=JOBS.map((j,i)=>[j,i]).filter(([j])=>f.m.some(w=>j[1].toLowerCase().includes(w)));
+    return `<article class="card fiche" id="${id}"><h2>${esc(f.n)}</h2><p class="lead">${esc(f.s)}${jobs.length?` · <span class="pill pA">${jobs.length} offre(s) dans ta liste</span>`:''}</p>
+      <p style="margin:0 0 10px;font-size:13.5px">${esc(f.what)}</p>
+      <details open><summary>Pourquoi ça colle avec toi</summary><div>${esc(f.why)}</div></details>
+      <details><summary>Enjeux achats probables</summary><div><ul>${f.e.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>
+      <details><summary>Ta phrase d'accroche</summary><div><p class="quote" style="margin:0">${esc(f.pitch)}</p></div></details>
+      <details><summary>3 questions à poser</summary><div><ul>${f.q.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>
+      ${f.c.length?`<details><summary>Contacts identifiés</summary><div><ul>${f.c.map(([s,nm,r])=>`<li><a href="${L(s)}" target="_blank" rel="noopener">${esc(nm)}</a> : ${esc(r)}</li>`).join('')}</ul></div></details>`:''}
+      ${jobs.length?`<details><summary>Offres ouvertes</summary><div><ul>${jobs.map(([j,i])=>`<li>${J(j[4])?`<a href="${J(j[4])}" target="_blank" rel="noopener">${esc(j[2])}</a>`:esc(j[2])} <button class="btn ghost sm" data-kit="${i}" style="margin-left:6px">Préparer</button></li>`).join('')}</ul></div></details>`:''}
+    </article>`}).join(''):'<div class="empty">Aucune fiche ne correspond.</div>';
+}
+function ficheFor(co){co=co.toLowerCase();return FICHES.find(f=>f.m.some(w=>co.includes(w)))}
+
+/* ---------- état local ---------- */
+let S={};
+try{S=JSON.parse(localStorage.getItem('mi-state')||'{}')}catch(e){S={}}
+const save=()=>{try{localStorage.setItem('mi-state',JSON.stringify(S))}catch(e){}; refreshCounts()};
+const esc=(t)=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const toast=(m)=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1600)};
+
+const JOB_ST=["À faire","Candidaté","Entretien","Refus","Pas pour moi"];
+const NET_ST=["À contacter","Invité","Échange fait","Relancer"];
+
+/* ---------- mise à jour des offres : badge "Nouveau" ----------
+   Chaque offre est identifiée par entreprise + poste. À la toute première visite, tout est marqué comme déjà vu.
+   Après chaque mise à jour de la page, les offres ajoutées apparaissent en "Nouveau" jusqu'à ce qu'il quitte l'onglet Offres. */
+const UPDATED="31/10/2026";
+const jkey=j=>(j[1]+'|'+j[2]).toLowerCase();
+let SEEN=null;
+try{SEEN=JSON.parse(localStorage.getItem('mi-seen')||'null')}catch(e){}
+if(!Array.isArray(SEEN)){SEEN=JOBS.map(jkey);try{localStorage.setItem('mi-seen',JSON.stringify(SEEN))}catch(e){}}
+let SEEN_SET=new Set(SEEN);
+const isNew=j=>!SEEN_SET.has(jkey(j));
+function markAllSeen(){SEEN=JOBS.map(jkey);SEEN_SET=new Set(SEEN);try{localStorage.setItem('mi-seen',JSON.stringify(SEEN))}catch(e){}}
+
+/* ---------- dates et relances ---------- */
+const DAY=86400000;
+const ago=k=>S[k+'_d']?Math.floor((Date.now()-S[k+'_d'])/DAY):null;
+const agoTxt=d=>d===null?'':d===0?"aujourd'hui":d===1?'hier':`il y a ${d} j`;
+const WAITING={j:["Candidaté"],n:["Invité"]};
+
+function jobRow(j,i){
+  const [p,co,t,loc,id,cat,why]=j; const k='j'+i; const st=S[k]||"À faire"; const url=J(id);
+  const done=st==="Candidaté"||st==="Entretien"; const d=ago(k);
+  const late=st==="Candidaté"&&d!==null&&d>=7;
+  return `<div class="row ${done?'done':''}"><span class="stripe s${p}"></span><div>
+    <h3>${url?`<a href="${url}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}</h3>
+    <div class="meta">${isNew(j)?'<span class="pill pnew">Nouveau</span>':''}<span class="pill p${p}">Priorité ${p}</span><b style="color:var(--ink)">${esc(co)}</b><span>${esc(loc)}</span><span class="tag">${esc(cat)}</span>${d!==null&&st!=="À faire"?`<span class="pill ${late?'pwarn':'pC'}">${esc(st)} ${agoTxt(d)}${late?' · à relancer':''}</span>`:''}</div>
+    <div class="why">${esc(why)}</div></div>
+    <div class="act"><label for="js${i}" style="position:absolute;left:-9999px">Statut</label><select class="status" id="js${i}" data-k="${k}">${JOB_ST.map(s=>`<option ${s===st?'selected':''}>${s}</option>`).join('')}</select>${p!=="C"?`<button class="btn ghost sm" data-kit="${i}">Préparer ma candidature</button>`:''}</div></div>`;
+}
+function netRow(n,i){
+  const [c,slug,name,role,why,mut]=n; const k='n'+i; const st=S[k]||"À contacter"; const d=ago(k);
+  const late=st==="Invité"&&d!==null&&d>=7;
+  const prio = (c==='c1'||c==='c2')?'A':(c==='c6'||c==='c7'||c==='c8')?'B':'C';
+  return `<div class="row ${st==='Échange fait'?'done':''}"><span class="stripe s${prio}"></span><div>
+    <h3><a href="${L(slug)}" target="_blank" rel="noopener">${esc(name)}</a></h3>
+    <div class="meta"><span>${esc(role)}</span>${mut?'<span class="pill pA">Relation commune avec Pierre</span>':''}${d!==null&&st!=="À contacter"?`<span class="pill ${late?'pwarn':'pC'}">${esc(st)} ${agoTxt(d)}${late?' · à relancer':''}</span>`:''}</div>
+    <div class="why">${esc(why)}</div></div>
+    <div class="act"><label for="ns${i}" style="position:absolute;left:-9999px">Statut</label><select class="status" id="ns${i}" data-k="n${i}">${NET_ST.map(s=>`<option ${s===st?'selected':''}>${s}</option>`).join('')}</select></div></div>`;
+}
+
+/* ---------- vues ---------- */
+const jobF={q:"",p:"Tout"}, netF={q:"",c:"Tout"}, coF={q:"",s:"Tout"};
+function chips(el,opts,cur,cb){el.innerHTML=opts.map(o=>`<button class="chip" aria-pressed="${o===cur}" data-o="${esc(o)}">${esc(o)}</button>`).join('');el.onclick=e=>{const b=e.target.closest('button');if(b)cb(b.dataset.o)}}
+function renderJobs(){
+  const opts=["Tout","Nouveau","Priorité A","Priorité B","Priorité C","Hors IDF","Public","Mobilité","Indirects","Conseil","À faire"];
+  chips(document.getElementById('fJobs'),opts,jobF.p,v=>{jobF.p=v;renderJobs()});
+  const q=jobF.q.toLowerCase();
+  const out=JOBS.map((j,i)=>[j,i]).filter(([j,i])=>{
+    const txt=j.join(' ').toLowerCase(); if(q&&!txt.includes(q))return false;
+    const f=jobF.p; if(f==="Tout")return true; if(f.startsWith("Priorité"))return j[0]===f.slice(-1);
+    if(f==="À faire")return (S['j'+i]||"À faire")==="À faire"; if(f==="Nouveau")return isNew(j); return j[5]===f;
+  }).sort((a,b)=>a[0][0].localeCompare(b[0][0]));
+  document.getElementById('jobs').innerHTML=out.length?out.map(([j,i])=>jobRow(j,i)).join(''):'<div class="empty">Aucune offre pour ce filtre.</div>';
+}
+function renderNet(){
+  chips(document.getElementById('fNet'),["Tout","Relation commune","À contacter",...CIRCLES.map(c=>c[1].split('. ')[1])],netF.c,v=>{netF.c=v;renderNet()});
+  const q=netF.q.toLowerCase(); let html="";
+  CIRCLES.forEach(([cid,title,sub],k)=>{
+    const short=title.split('. ')[1];
+    const rows=NET.map((n,i)=>[n,i]).filter(([n,i])=>{
+      if(n[0]!==cid)return false; if(q&&!n.join(' ').toLowerCase().includes(q))return false;
+      const f=netF.c; if(f==="Tout")return true; if(f==="Relation commune")return n[5]; if(f==="À contacter")return (S['n'+i]||"À contacter")==="À contacter"; return f===short;
+    });
+    if(!rows.length)return;
+    html+=`<div class="sec-title"><span class="n">CERCLE ${k+1}</span><div><h2>${esc(short)}</h2><p>${esc(sub)}</p></div></div><div class="list">${rows.map(([n,i])=>netRow(n,i)).join('')}</div>`;
+  });
+  document.getElementById('net').innerHTML=html||'<div class="empty">Aucun contact pour ce filtre.</div>';
+}
+function renderCos(){
+  chips(document.getElementById('fCo'),["Tout",...SECT],coF.s,v=>{coF.s=v;renderCos()});
+  const q=coF.q.toLowerCase(); let html="";
+  SECT.forEach(s=>{
+    if(coF.s!=="Tout"&&coF.s!==s)return;
+    const rows=COS.map((c,i)=>[c,i]).filter(([c])=>c[0]===s&&(!q||c.join(' ').toLowerCase().includes(q)));
+    if(!rows.length)return;
+    html+=`<div class="sec-title"><h2>${esc(s)}</h2><p>${rows.length} cibles</p></div><div class="card table-wrap" style="padding:4px 8px"><table class="co-table"><thead><tr><th style="width:26%">Entreprise</th><th style="width:11%">Angle</th><th>Pourquoi / point d'entrée</th><th style="width:16%">Carrières</th><th style="width:9%">Fait</th></tr></thead><tbody>${rows.map(([c,i])=>`<tr><td><b>${esc(c[1])}</b></td><td><span class="tag">${esc(c[2])}</span></td><td>${esc(c[3])}</td><td>${c[4].includes('.')?`<a href="https://${c[4]}" target="_blank" rel="noopener">${esc(c[4])}</a>`:'<span style="color:var(--muted)">site de l\'entreprise</span>'}</td><td><input type="checkbox" aria-label="Candidature envoyée à ${esc(c[1])}" data-k="c${i}" ${S['c'+i]?'checked':''} style="accent-color:var(--accent);width:16px;height:16px"></td></tr>`).join('')}</tbody></table></div>`;
+  });
+  document.getElementById('cos').innerHTML=html||'<div class="empty">Aucune entreprise pour ce filtre.</div>';
+}
+function renderMsgs(){
+  document.getElementById('msgs').innerHTML=MSGS.map(([t,m],i)=>`<div class="card"><h2>${esc(t)}</h2><p class="quote" id="m${i}">${esc(m)}</p><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="tag" style="font-variant-numeric:tabular-nums">${m.length} caractères${m.length<=300?' · OK pour une invitation':''}</span><button class="btn" data-copy="m${i}">Copier</button></div></div>`).join('');
+}
+function renderPlan(){
+  document.getElementById('plan').innerHTML=PLAN.map(([w,items],k)=>`<div class="card"><h2>${esc(w)}</h2>${items.map((t,i)=>{const key='p'+k+'_'+i;return `<label class="check ${S[key]?'on':''}"><input type="checkbox" data-k="${key}" ${S[key]?'checked':''}><span>${esc(t)}</span></label>`}).join('')}</div>`).join('');
+  document.getElementById('weekTodo').innerHTML=WEEK.map((t,i)=>{const key='w'+i;return `<label class="check ${S[key]?'on':''}"><input type="checkbox" data-k="${key}" ${S[key]?'checked':''}><span>${esc(t)}</span></label>`}).join('');
+}
+function renderProfile(){
+  const exp=[["sept. – oct. 2026","Africa Global Logistics (MSC), CDD","Acheteur Junior Hors Production : Travel, IT, Facilities ; consultations, négociation, suivi des contrats."],
+  ["sept. 2024 – déc. 2025","Groupe Bolloré, alternance 16 mois","Global Mobility Buyer : AO, négociations, contrats-cadres, analyse des dépenses, RSE et risques fournisseurs."],
+  ["mars – août 2024","L'Oréal, stage 6 mois","Junior Buyer GBS Sourcing : AO Hôtel Global, stratégie MICE mondiale, stratégie Travel."],
+  ["sept. 2023 – févr. 2024","EDF, stage 6 mois","Acheteur : pièces de rechange nucléaires, marchés publics, SAP."],
+  ["2021 – 2022","Team Challenge Rennes","Responsable animation : équipe de 5, délégation de 250 personnes."]];
+  document.getElementById('timeline').innerHTML=exp.map(([d,c,t])=>`<div class="tl"><span class="d">${d}</span><div><b>${esc(c)}</b><br><span style="color:var(--muted)">${esc(t)}</span></div></div>`).join('');
+  const fixes=[["Section Langues vide","Ajoute français (natif), anglais (courant) et coréen (notions) si c'est vrai. Les recruteurs filtrent sur les langues."],
+  ["Compétences génériques (Sport, Rédaction…)","Remplace par : Achats indirects, Appels d'offres, Négociation, Sourcing, Gestion des contrats, Travel management, MICE, Fleet management, SAP, Commande publique, Achats responsables, Spend analysis."],
+  ["Aucun chiffre","Ajoute des ordres de grandeur : nombre d'AO, montant des dépenses gérées, nombre de pays ou de fournisseurs, économies obtenues."],
+  ["Le CCA brouille le titre","Garde-le dans Formation. Mets-le en avant seulement pour l'aérien (compagnies, aéroports, catering)."],
+  ["Numéro de téléphone public","Supprime ou modifie le post « RECHERCHE DE STAGE » de 2023."],
+  ["Pas de recommandations","Demande-en 3 : Kevin Roca, Jeanne Chauveau, ton tuteur L'Oréal."]];
+  document.getElementById('fixes').innerHTML=fixes.map(([a,b],i)=>{const key='f'+i;return `<label class="check ${S[key]?'on':''}"><input type="checkbox" data-k="${key}" ${S[key]?'checked':''}><span><b>${esc(a)}</b> : ${esc(b)}</span></label>`}).join('');
+}
+function renderHome(){
+  const tj=JOBS.map((j,i)=>[j,i]).filter(([j])=>j[0]==="A").sort((a,b)=>(isNew(b[0])?1:0)-(isNew(a[0])?1:0)).slice(0,6);
+  document.getElementById('topJobs').innerHTML=tj.map(([j,i])=>jobRow(j,i)).join('');
+  const picks=["kevin-roca-95824051","jeannechauveau","simon-quilliet-310","ondine-bedetti-37525748","thibault-coste-765b26138","christelle-navarre-64a446144"];
+  document.getElementById('topPeople').innerHTML=picks.map(s=>{const i=NET.findIndex(n=>n[1]===s);return netRow(NET[i],i)}).join('');
+}
+function refreshCounts(){
+  const applied=JOBS.filter((j,i)=>["Candidaté","Entretien"].includes(S['j'+i])).length;
+  const interviews=JOBS.filter((j,i)=>S['j'+i]==="Entretien").length;
+  const contacted=NET.filter((n,i)=>(S['n'+i]||"À contacter")!=="À contacter").length;
+  const spont=COS.filter((c,i)=>S['c'+i]).length;
+  const planItems=PLAN.reduce((a,p)=>a+p[1].length,0); const planDone=PLAN.reduce((a,p,k)=>a+p[1].filter((t,i)=>S['p'+k+'_'+i]).length,0);
+  const tiles=[[applied,JOBS.length,"candidatures envoyées",`sur ${JOBS.length} offres repérées`],[contacted,NET.length,"personnes contactées",`sur ${NET.length} dans ton réseau`],[spont,COS.length,"candidatures spontanées",`sur ${COS.length} cibles`],[interviews,Math.max(interviews,3),"entretiens","objectif : 3 ce mois-ci"]];
+  document.getElementById('kpis').innerHTML=tiles.map(([v,t,l,s])=>`<div class="card kpi"><b>${v}</b><span>${l}<br>${s}</span><div class="bar"><i style="width:${Math.min(100,Math.round(v/t*100))}%"></i></div></div>`).join('');
+  document.getElementById('cOff').textContent=JOBS.length; document.getElementById('cNet').textContent=NET.length; document.getElementById('cCo').textContent=COS.length;
+  const pct=Math.round(planDone/planItems*100); document.getElementById('sideProg').style.width=pct+'%'; document.getElementById('sideTxt').textContent=`Plan 30 jours : ${pct} %`;
+}
+
+/* ---------- relances ---------- */
+function renderRelances(){
+  const items=[];
+  JOBS.forEach((j,i)=>{const k='j'+i,d=ago(k);if(S[k]==="Candidaté"&&d!==null&&d>=7)items.push([k,`Candidature : ${j[2]}`,j[1],d,J(j[4])])});
+  NET.forEach((n,i)=>{const k='n'+i,d=ago(k);if(S[k]==="Invité"&&d!==null&&d>=7)items.push([k,`Message à ${n[2]}`,n[3],d,L(n[1])])});
+  items.sort((a,b)=>b[3]-a[3]);
+  const el=document.getElementById('relances');
+  if(!items.length){
+    const pending=JOBS.filter((j,i)=>S['j'+i]==="Candidaté").length+NET.filter((n,i)=>S['n'+i]==="Invité").length;
+    el.innerHTML=`<div class="empty" style="padding:14px">${pending?`Rien à relancer pour l'instant. ${pending} envoi(s) en attente de réponse.`:"Rien à relancer. Dès que tu passes une offre en « Candidaté » ou un contact en « Invité », la date est enregistrée et la relance apparaîtra ici 7 jours plus tard."}</div>`;return;
+  }
+  el.innerHTML=items.map(([k,t,sub,d,url])=>`<div class="relance"><div><b>${url?`<a href="${url}" target="_blank" rel="noopener" style="color:var(--ink)">${esc(t)}</a>`:esc(t)}</b><div class="meta"><span>${esc(sub)}</span><span class="pill pwarn">sans réponse depuis ${d} j</span></div></div><button class="btn sm" data-relance="${k}">Relancé</button></div>`).join('');
+}
+
+/* ---------- kit de candidature ---------- */
+const XP={
+  mob:"Chez Bolloré (16 mois), j'ai géré la catégorie Mobilité groupe : appels d'offres, négociations commerciales, juridiques et techniques, contrats-cadres et suivi de la performance fournisseurs.",
+  travel:"Chez L'Oréal (Global Business Services Sourcing), j'ai participé à l'appel d'offres Hôtel Global jusqu'aux négociations finales et au déploiement, et contribué aux stratégies Travel et MICE mondiales.",
+  ind:"Chez Africa Global Logistics, j'ai couvert les achats hors production Travel, IT et Facilities : pilotage des consultations, analyse des offres, négociation et suivi des contrats.",
+  pub:"Chez EDF (Direction des Achats Groupe), j'ai mené des achats en gré à gré et en mise en concurrence avec publication d'avis de marché, dans le respect du Code de la commande publique.",
+  ind2:"Chez EDF, j'ai acheté des pièces de rechange pour les centrales nucléaires : analyse du besoin, stratégie d'achat, négociation, analyse des risques et contractualisation sous SAP.",
+  rse:"Chez Bolloré, j'ai contribué aux objectifs RSE et compliance : évaluation des risques fournisseurs et critères responsables dans les consultations.",
+  data:"J'ai réalisé les analyses de dépenses et le reporting de performance achats (Excel avancé, outil interne de suivi des projets achats).",
+  intl:"J'ai travaillé dans des environnements internationaux : un groupe présent dans plus de 40 pays (AGL / MSC), une équipe sourcing mondiale (L'Oréal) et un semestre à Hanyang University à Séoul."
+};
+const KIT={
+  "Mobilité":{x:["mob","travel","ind"],kw:["Mobilité","Flotte automobile","Travel","TCO","Appels d'offres","Négociation","Contrats-cadres","RSE / électrification"],angle:"ma spécialité, les achats Mobilité et Travel"},
+  "Indirects":{x:["ind","mob","travel","data"],kw:["Achats indirects","Hors production","Frais généraux","Appels d'offres","Négociation","Gestion des contrats","Performance fournisseurs","Spend analysis"],angle:"les achats hors production, que je pratique depuis deux ans"},
+  "Public":{x:["pub","ind","mob"],kw:["Code de la commande publique","Marchés publics","Mise en concurrence","Rédaction des pièces","Analyse des offres","Exécution des marchés"],angle:"l'achat public, que j'ai pratiqué chez EDF"},
+  "Événementiel":{x:["travel","mob","ind"],kw:["MICE","Hospitality","Hôtellerie","Événementiel","Négociation","Prestataires","Appels d'offres"],angle:"les achats MICE et hôtellerie, que j'ai pratiqués chez L'Oréal"},
+  "Grand groupe":{x:["mob","travel","ind2","intl"],kw:["Appels d'offres","Négociation","Contractualisation","Gestion fournisseurs","SAP","RSE","International"],angle:"une direction achats groupe exigeante comme celles où j'ai évolué"},
+  "Conseil":{x:["mob","travel","pub","ind"],kw:["Polyvalence","Achats indirects","Marchés publics","Appels d'offres","Négociation","Adaptabilité"],angle:"des missions variées, comme mes expériences chez EDF, L'Oréal et Bolloré"},
+  "Luxe":{x:["travel","ind","mob","rse"],kw:["Excellence","Négociation","Gestion fournisseurs","Qualité","RSE","International"],angle:"une maison exigeante, après mon expérience chez L'Oréal"},
+  "Aérien":{x:["travel","mob","ind2"],kw:["Aérien","Travel","Prestataires","Négociation","Sécurité","Qualité de service"],angle:"le secteur aérien, que je connais aussi côté cabine grâce à mon CCA"},
+  "Retail / conso":{x:["ind","mob","data"],kw:["Négociation","Gestion fournisseurs","Analyse des coûts","Appels d'offres","Performance"],angle:"des achats au service du business et des clients"},
+  "PME / ETI":{x:["ind","mob","pub"],kw:["Polyvalence","Autonomie","Négociation","Appels d'offres","Structuration des achats"],angle:"un rôle polyvalent où je peux structurer les achats"},
+  "Hors IDF":{x:["mob","ind","ind2"],kw:["Appels d'offres","Négociation","Contractualisation","Gestion fournisseurs"],angle:"un poste d'acheteur où je peux prendre en main un portefeuille"}
+};
+function kitFor(i){
+  const [p,co,t,loc,id,cat,why]=JOBS[i]; const K=KIT[cat]||KIT["Grand groupe"];
+  const bullets=K.x.map(x=>XP[x]);
+  const letter=`Objet : candidature au poste de ${t}
+
+Madame, Monsieur,
+
+Acheteur Hors Production diplômé du MS Manager de l'Achat International de KEDGE Business School, je vous propose ma candidature pour le poste de ${t} chez ${co}. Ce poste rejoint ${K.angle}.
+
+${bullets[0]}
+
+${bullets[1]}
+
+${bullets[2]||XP.data}
+
+Rigoureux dans l'analyse et à l'aise dans la négociation, je sais travailler avec des prescripteurs internes exigeants et des fournisseurs internationaux. Je suis disponible immédiatement et serais heureux d'échanger avec vous sur vos enjeux achats.
+
+Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.
+
+Mathéo Irigaray`;
+  const dm=`Bonjour [Prénom], je viens de postuler au poste de ${t} chez ${co}. Acheteur hors production (L'Oréal, Bolloré, EDF), je serais ravi d'en savoir plus sur l'équipe. Merci ! Mathéo`;
+  const cvTitle=`Acheteur ${cat==="Public"?"public":cat==="Mobilité"?"Mobilité & Travel":cat==="Événementiel"?"MICE & Hospitality":"Hors Production"} | EDF · L'Oréal · Bolloré | MS KEDGE`;
+  return {p,co,t,loc,cat,why,url:J(id),bullets,kw:K.kw,letter,dm,cvTitle};
+}
+function openKit(i){
+  const k=kitFor(i);
+  document.getElementById('kitTitle').textContent=k.t;
+  document.getElementById('kitMeta').innerHTML=`<span class="pill p${k.p}">Priorité ${k.p}</span><b style="color:var(--ink)">${esc(k.co)}</b><span>${esc(k.loc)}</span>${k.url?`<a href="${k.url}" target="_blank" rel="noopener">Voir l'offre</a>`:''}`;
+  const fi=ficheFor(k.co);
+  document.getElementById('kitBody').innerHTML=`
+    ${fi?`<div class="quote" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;white-space:normal"><span>Une fiche entretien existe pour ${esc(fi.n)} : enjeux, accroche, questions à poser.</span><button class="btn sm" data-fiche="${esc(fi.n)}">Ouvrir la fiche</button></div>`:''}
+    <h3>Pourquoi ce poste</h3><p style="margin:0">${esc(k.why)}</p>
+    <h3>Titre à mettre en haut du CV</h3><p class="quote" id="kCv">${esc(k.cvTitle)}</p><button class="btn sm" data-copy="kCv">Copier</button>
+    <h3>Les 3 expériences à mettre en avant</h3><ul class="clean">${k.bullets.slice(0,3).map(b=>`<li>${esc(b)}</li>`).join('')}</ul>
+    <h3>Mots-clés à reprendre dans le CV et la lettre</h3><div class="kw">${k.kw.map(w=>`<span class="tag">${esc(w)}</span>`).join('')}</div>
+    <p style="font-size:13px;color:var(--muted);margin:8px 0 0">Relis l'annonce et ajoute ses mots exacts : les logiciels de tri des candidatures les cherchent.</p>
+    <h3>Lettre de motivation</h3><p class="quote" id="kLetter">${esc(k.letter)}</p><button class="btn sm" data-copy="kLetter">Copier la lettre</button>
+    <h3>Message au recruteur ou au manager (après avoir postulé)</h3><p class="quote" id="kDm">${esc(k.dm)}</p><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="tag">${k.dm.length} caractères</span><button class="btn sm" data-copy="kDm">Copier</button></div>
+    <p style="font-size:13px;color:var(--muted)">Pour trouver la personne, cherche sur LinkedIn « ${esc(k.co)} achats » ou « ${esc(k.co)} talent acquisition ».</p>`;
+  const d=document.getElementById('kit'); if(d.showModal)d.showModal(); else d.setAttribute('open','');
+}
+document.getElementById('kitClose').addEventListener('click',()=>document.getElementById('kit').close());
+
+/* ---------- interactions ---------- */
+document.addEventListener('change',e=>{
+  const k=e.target.dataset&&e.target.dataset.k; if(!k)return;
+  S[k]=e.target.type==='checkbox'?e.target.checked:e.target.value;
+  if(e.target.tagName==='SELECT'){const t=k[0];if(WAITING[t]&&WAITING[t].includes(e.target.value))S[k+'_d']=Date.now();else if(e.target.value==="À faire"||e.target.value==="À contacter")delete S[k+'_d'];else S[k+'_d']=Date.now();}
+  if(e.target.type==='checkbox'){const l=e.target.closest('.check');if(l)l.classList.toggle('on',e.target.checked)}
+  else{const r=e.target.closest('.row');if(r)r.classList.toggle('done',["Candidaté","Entretien","Échange fait"].includes(e.target.value))}
+  save();
+});
+document.addEventListener('click',async e=>{
+  const kb=e.target.closest('[data-kit]'); if(kb){openKit(+kb.dataset.kit);return}
+  const fb=e.target.closest('[data-fiche]'); if(fb){
+    const d=document.getElementById('kit'); if(d.open)d.close();
+    document.getElementById('qFi').value=''; location.hash='fiches'; renderFiches();
+    const id='fi-'+fb.dataset.fiche.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+    setTimeout(()=>{const el=document.getElementById(id);if(el){document.querySelectorAll('.fiche.target').forEach(x=>x.classList.remove('target'));el.classList.add('target');el.scrollIntoView({block:'start'})}},200);
+    return}
+  const rb=e.target.closest('[data-relance]'); if(rb){S[rb.dataset.relance+'_d']=Date.now();save();renderRelances();toast('Relance notée : prochain rappel dans 7 jours');return}
+  const b=e.target.closest('[data-copy]'); if(!b)return;
+  const txt=document.getElementById(b.dataset.copy).innerText;
+  try{await navigator.clipboard.writeText(txt);toast('Copié')}catch(err){toast('Copie refusée : sélectionne le texte à la main')}
+});
+document.getElementById('qJobs').addEventListener('input',e=>{jobF.q=e.target.value;renderJobs()});
+document.getElementById('qNet').addEventListener('input',e=>{netF.q=e.target.value;renderNet()});
+document.getElementById('qCo').addEventListener('input',e=>{coF.q=e.target.value;renderCos()});
+
+const VIEWS=["accueil","profil","offres","reseau","entreprises","fiches","messages","plan"];
+document.getElementById('qFi').addEventListener('input',renderFiches);
+let CUR=null;
+function route(){
+  const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"accueil";
+  if(CUR==="offres"&&v!=="offres")markAllSeen();
+  CUR=v;
+  const nNew=JOBS.filter(isNew).length;
+  document.getElementById('updInfo').innerHTML=`<span class="pill pC">Offres mises à jour le ${UPDATED}</span> ${nNew?`<span class="pill pnew">${nNew} nouvelle(s) depuis ta dernière visite</span>`:''}`;
+  if(v==="accueil")renderRelances();
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.v===v));
+  if(v==="accueil")renderHome(); if(v==="offres")renderJobs(); if(v==="reseau")renderNet();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+document.getElementById('cFi').textContent=FICHES.length;
+renderFiches();renderProfile();renderMsgs();renderPlan();renderCos();renderJobs();renderNet();refreshCounts();route();
+</script>
+</body>
+</html>
